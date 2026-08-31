@@ -1,0 +1,731 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		04EA40899B14B3C4DC8F59FE /* FujikageQLPreview.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3FBF20F50702A8C439C07780 /* FujikageQLPreview.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		157B10975DFA8C1F3D44F614 /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14CA5975893483BD5B7FF72 /* Fixtures.swift */; };
+		1E911965BE126EE846029A49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFFA945EE4430085E8D6D73E /* Assets.xcassets */; };
+		201FB058E2ACD1692E7C6838 /* FujikageQLThumbnail.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C0F7934C80D0F0712A0D0B2A /* FujikageQLThumbnail.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		210EE01BBC4673B065DA59C2 /* IconFolderStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB20F85A4ADF6F68E498ED /* IconFolderStoreTests.swift */; };
+		3C27942CE302D9015F332B8C /* AppIconMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829E2C4CEDBE85BB25A4C052 /* AppIconMark.swift */; };
+		3D766EE5016EE3D4E46AE38B /* RAFThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED8DB1389BC9CCD87DB5B14 /* RAFThumbnailProvider.swift */; };
+		4198F60EA934C470278D1ECF /* IconStamper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3243F85877FA6D8D7DBDCC21 /* IconStamper.swift */; };
+		4367B42AF0F7558CBB945DC8 /* VolumeFacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB1CC83F1682B49B6764D19 /* VolumeFacts.swift */; };
+		491A0930BF742BB4CFB3703E /* IconStampPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E17846EEE57A0251CF4FD3 /* IconStampPolicy.swift */; };
+		55B0CBAEFE85C90CF3FB88B1 /* RAFEmbeddedJPEG.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDB52274CDC50A95AF1077D /* RAFEmbeddedJPEG.swift */; };
+		90C394DBB6C619503F545592 /* StampLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9480F1FB1C8E260C683B234 /* StampLog.swift */; };
+		A427CC8AB810E1F1EF4FCA10 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463E8EDA5B356D0022556D5E /* Theme.swift */; };
+		A485F1D77C4C7188EE5EA556 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3B03CA0409382DB994D936 /* ContentView.swift */; };
+		A896DCFBDE5381DE3185E342 /* IconFolderStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A80C0746D911883D89387B /* IconFolderStore.swift */; };
+		C40F4BB9C4DFDB0BF190F8E4 /* IconStampPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883CFD1D35013286846F39CE /* IconStampPolicyTests.swift */; };
+		D167D123F8B8A60149237FA7 /* FujikageQLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93051EE90CAE7081FE35E2 /* FujikageQLApp.swift */; };
+		D6C62E6A33902DFB3A7E61D8 /* IconStamperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983752F85CB7C76A2A71C6DC /* IconStamperTests.swift */; };
+		DDBAA74CB5FC82E6E96D451C /* RAFEmbeddedJPEGTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE38E048BDE288B8556CC436 /* RAFEmbeddedJPEGTests.swift */; };
+		E29C6F3D535214824595C6C4 /* RAFEmbeddedJPEG.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDB52274CDC50A95AF1077D /* RAFEmbeddedJPEG.swift */; };
+		EA3795431DA73DA8C4C6955D /* FolderDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D157BC41554888017FFF8ECF /* FolderDropView.swift */; };
+		EEC121B97C22E2816746B41C /* RAFEmbeddedJPEG.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDB52274CDC50A95AF1077D /* RAFEmbeddedJPEG.swift */; };
+		FD0D13410D7174DC861EE2EB /* RAFPreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B43170105B35A5BF994CE28 /* RAFPreviewProvider.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0B7BECB0DC25BBE9A9DA417C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 69CC265548C4F073648C1B7A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6F8282C3C3D42E18A11F631B;
+			remoteInfo = FujikageQLPreview;
+		};
+		AEDFBE14BEA743ED20BFBA2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 69CC265548C4F073648C1B7A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A226BA2AD5F068777B904F90;
+			remoteInfo = FujikageQLThumbnail;
+		};
+		B5D9F5CA8A79A8714BC179C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 69CC265548C4F073648C1B7A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7D8E14C05F95EB2BB8FE196A;
+			remoteInfo = FujikageQL;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BC73EB3CF9B889D8C03EB455 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				04EA40899B14B3C4DC8F59FE /* FujikageQLPreview.appex in Embed Foundation Extensions */,
+				201FB058E2ACD1692E7C6838 /* FujikageQLThumbnail.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1F3B03CA0409382DB994D936 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2B93051EE90CAE7081FE35E2 /* FujikageQLApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FujikageQLApp.swift; sourceTree = "<group>"; };
+		3243F85877FA6D8D7DBDCC21 /* IconStamper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconStamper.swift; sourceTree = "<group>"; };
+		3AEB20F85A4ADF6F68E498ED /* IconFolderStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconFolderStoreTests.swift; sourceTree = "<group>"; };
+		3C3DD4DA96DDBE075FF61234 /* FujikageQLTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FujikageQLTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FBF20F50702A8C439C07780 /* FujikageQLPreview.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FujikageQLPreview.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		43E17846EEE57A0251CF4FD3 /* IconStampPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconStampPolicy.swift; sourceTree = "<group>"; };
+		463E8EDA5B356D0022556D5E /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		50A80C0746D911883D89387B /* IconFolderStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconFolderStore.swift; sourceTree = "<group>"; };
+		5B1904C07C3740BBAAC5D04E /* FujikageQL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FujikageQL.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6ED8DB1389BC9CCD87DB5B14 /* RAFThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAFThumbnailProvider.swift; sourceTree = "<group>"; };
+		829E2C4CEDBE85BB25A4C052 /* AppIconMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIconMark.swift; sourceTree = "<group>"; };
+		883CFD1D35013286846F39CE /* IconStampPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconStampPolicyTests.swift; sourceTree = "<group>"; };
+		983752F85CB7C76A2A71C6DC /* IconStamperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconStamperTests.swift; sourceTree = "<group>"; };
+		9B43170105B35A5BF994CE28 /* RAFPreviewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAFPreviewProvider.swift; sourceTree = "<group>"; };
+		C0F7934C80D0F0712A0D0B2A /* FujikageQLThumbnail.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FujikageQLThumbnail.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFFA945EE4430085E8D6D73E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D157BC41554888017FFF8ECF /* FolderDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderDropView.swift; sourceTree = "<group>"; };
+		DE38E048BDE288B8556CC436 /* RAFEmbeddedJPEGTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAFEmbeddedJPEGTests.swift; sourceTree = "<group>"; };
+		EBDB52274CDC50A95AF1077D /* RAFEmbeddedJPEG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAFEmbeddedJPEG.swift; sourceTree = "<group>"; };
+		F14CA5975893483BD5B7FF72 /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
+		F9480F1FB1C8E260C683B234 /* StampLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampLog.swift; sourceTree = "<group>"; };
+		FFB1CC83F1682B49B6764D19 /* VolumeFacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeFacts.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		4E03169AC9B100059C1FFF66 /* RAFJPEG */ = {
+			isa = PBXGroup;
+			children = (
+				EBDB52274CDC50A95AF1077D /* RAFEmbeddedJPEG.swift */,
+			);
+			path = RAFJPEG;
+			sourceTree = "<group>";
+		};
+		8D21F79892B15E04DB50D595 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				EA877A0F5BF34ACC95FD2494 /* Host */,
+				B8B90C0429E982D975F92599 /* Preview */,
+				4E03169AC9B100059C1FFF66 /* RAFJPEG */,
+				A3C4B2D592A18E4A83082E03 /* Thumbnail */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		A3C4B2D592A18E4A83082E03 /* Thumbnail */ = {
+			isa = PBXGroup;
+			children = (
+				6ED8DB1389BC9CCD87DB5B14 /* RAFThumbnailProvider.swift */,
+			);
+			path = Thumbnail;
+			sourceTree = "<group>";
+		};
+		AAC8E9E13DF952F2AE049E7F = {
+			isa = PBXGroup;
+			children = (
+				EA642AC6110E2F8E57404BB9 /* Resources */,
+				8D21F79892B15E04DB50D595 /* Sources */,
+				F06AAA94A9A0BC9B35E9D1CE /* Tests */,
+				B69EC39FD7CB2D927EAFCAA4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B69EC39FD7CB2D927EAFCAA4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B1904C07C3740BBAAC5D04E /* FujikageQL.app */,
+				3FBF20F50702A8C439C07780 /* FujikageQLPreview.appex */,
+				3C3DD4DA96DDBE075FF61234 /* FujikageQLTests.xctest */,
+				C0F7934C80D0F0712A0D0B2A /* FujikageQLThumbnail.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B8B90C0429E982D975F92599 /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				9B43170105B35A5BF994CE28 /* RAFPreviewProvider.swift */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
+		EA642AC6110E2F8E57404BB9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CFFA945EE4430085E8D6D73E /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		EA877A0F5BF34ACC95FD2494 /* Host */ = {
+			isa = PBXGroup;
+			children = (
+				829E2C4CEDBE85BB25A4C052 /* AppIconMark.swift */,
+				1F3B03CA0409382DB994D936 /* ContentView.swift */,
+				D157BC41554888017FFF8ECF /* FolderDropView.swift */,
+				2B93051EE90CAE7081FE35E2 /* FujikageQLApp.swift */,
+				50A80C0746D911883D89387B /* IconFolderStore.swift */,
+				3243F85877FA6D8D7DBDCC21 /* IconStamper.swift */,
+				43E17846EEE57A0251CF4FD3 /* IconStampPolicy.swift */,
+				F9480F1FB1C8E260C683B234 /* StampLog.swift */,
+				463E8EDA5B356D0022556D5E /* Theme.swift */,
+				FFB1CC83F1682B49B6764D19 /* VolumeFacts.swift */,
+			);
+			path = Host;
+			sourceTree = "<group>";
+		};
+		F06AAA94A9A0BC9B35E9D1CE /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				F14CA5975893483BD5B7FF72 /* Fixtures.swift */,
+				3AEB20F85A4ADF6F68E498ED /* IconFolderStoreTests.swift */,
+				983752F85CB7C76A2A71C6DC /* IconStamperTests.swift */,
+				883CFD1D35013286846F39CE /* IconStampPolicyTests.swift */,
+				DE38E048BDE288B8556CC436 /* RAFEmbeddedJPEGTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		672ED7D4536ED76B6299221C /* FujikageQLTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAE197E53021C0855F71BBB9 /* Build configuration list for PBXNativeTarget "FujikageQLTests" */;
+			buildPhases = (
+				5CE440CEFDE8B7A128A7A84E /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8647E2E6075AC3E543389D59 /* PBXTargetDependency */,
+			);
+			name = FujikageQLTests;
+			packageProductDependencies = (
+			);
+			productName = FujikageQLTests;
+			productReference = 3C3DD4DA96DDBE075FF61234 /* FujikageQLTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6F8282C3C3D42E18A11F631B /* FujikageQLPreview */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9CC96FC962683527A3C2A94E /* Build configuration list for PBXNativeTarget "FujikageQLPreview" */;
+			buildPhases = (
+				0FF378F798FD027ABCCE980A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FujikageQLPreview;
+			packageProductDependencies = (
+			);
+			productName = FujikageQLPreview;
+			productReference = 3FBF20F50702A8C439C07780 /* FujikageQLPreview.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		7D8E14C05F95EB2BB8FE196A /* FujikageQL */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E78CD61C8459EBFDE9FDFE7A /* Build configuration list for PBXNativeTarget "FujikageQL" */;
+			buildPhases = (
+				45D0DDC365F8C0DECDC5DD90 /* Sources */,
+				3084C98EEFFD31A6929809EF /* Resources */,
+				BC73EB3CF9B889D8C03EB455 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C42DB9DB21FC0E2EE9B23083 /* PBXTargetDependency */,
+				D545B4598D8906D7083DEA2D /* PBXTargetDependency */,
+			);
+			name = FujikageQL;
+			packageProductDependencies = (
+			);
+			productName = FujikageQL;
+			productReference = 5B1904C07C3740BBAAC5D04E /* FujikageQL.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A226BA2AD5F068777B904F90 /* FujikageQLThumbnail */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1E1DDD34E7F8597DA8413D9 /* Build configuration list for PBXNativeTarget "FujikageQLThumbnail" */;
+			buildPhases = (
+				F19B6AA5E2B3E4CA7AAD802A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FujikageQLThumbnail;
+			packageProductDependencies = (
+			);
+			productName = FujikageQLThumbnail;
+			productReference = C0F7934C80D0F0712A0D0B2A /* FujikageQLThumbnail.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		69CC265548C4F073648C1B7A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					672ED7D4536ED76B6299221C = {
+						DevelopmentTeam = KA3Y4C7M3R;
+						ProvisioningStyle = Automatic;
+					};
+					6F8282C3C3D42E18A11F631B = {
+						DevelopmentTeam = KA3Y4C7M3R;
+						ProvisioningStyle = Automatic;
+					};
+					7D8E14C05F95EB2BB8FE196A = {
+						DevelopmentTeam = KA3Y4C7M3R;
+						ProvisioningStyle = Automatic;
+					};
+					A226BA2AD5F068777B904F90 = {
+						DevelopmentTeam = KA3Y4C7M3R;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 0135855F93CB97EBBE9C854A /* Build configuration list for PBXProject "FujikageQL" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = AAC8E9E13DF952F2AE049E7F;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B69EC39FD7CB2D927EAFCAA4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7D8E14C05F95EB2BB8FE196A /* FujikageQL */,
+				6F8282C3C3D42E18A11F631B /* FujikageQLPreview */,
+				672ED7D4536ED76B6299221C /* FujikageQLTests */,
+				A226BA2AD5F068777B904F90 /* FujikageQLThumbnail */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3084C98EEFFD31A6929809EF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E911965BE126EE846029A49 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0FF378F798FD027ABCCE980A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55B0CBAEFE85C90CF3FB88B1 /* RAFEmbeddedJPEG.swift in Sources */,
+				FD0D13410D7174DC861EE2EB /* RAFPreviewProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45D0DDC365F8C0DECDC5DD90 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C27942CE302D9015F332B8C /* AppIconMark.swift in Sources */,
+				A485F1D77C4C7188EE5EA556 /* ContentView.swift in Sources */,
+				EA3795431DA73DA8C4C6955D /* FolderDropView.swift in Sources */,
+				D167D123F8B8A60149237FA7 /* FujikageQLApp.swift in Sources */,
+				A896DCFBDE5381DE3185E342 /* IconFolderStore.swift in Sources */,
+				491A0930BF742BB4CFB3703E /* IconStampPolicy.swift in Sources */,
+				4198F60EA934C470278D1ECF /* IconStamper.swift in Sources */,
+				E29C6F3D535214824595C6C4 /* RAFEmbeddedJPEG.swift in Sources */,
+				90C394DBB6C619503F545592 /* StampLog.swift in Sources */,
+				A427CC8AB810E1F1EF4FCA10 /* Theme.swift in Sources */,
+				4367B42AF0F7558CBB945DC8 /* VolumeFacts.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5CE440CEFDE8B7A128A7A84E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				157B10975DFA8C1F3D44F614 /* Fixtures.swift in Sources */,
+				210EE01BBC4673B065DA59C2 /* IconFolderStoreTests.swift in Sources */,
+				C40F4BB9C4DFDB0BF190F8E4 /* IconStampPolicyTests.swift in Sources */,
+				D6C62E6A33902DFB3A7E61D8 /* IconStamperTests.swift in Sources */,
+				DDBAA74CB5FC82E6E96D451C /* RAFEmbeddedJPEGTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F19B6AA5E2B3E4CA7AAD802A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EEC121B97C22E2816746B41C /* RAFEmbeddedJPEG.swift in Sources */,
+				3D766EE5016EE3D4E46AE38B /* RAFThumbnailProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8647E2E6075AC3E543389D59 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7D8E14C05F95EB2BB8FE196A /* FujikageQL */;
+			targetProxy = B5D9F5CA8A79A8714BC179C9 /* PBXContainerItemProxy */;
+		};
+		C42DB9DB21FC0E2EE9B23083 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6F8282C3C3D42E18A11F631B /* FujikageQLPreview */;
+			targetProxy = 0B7BECB0DC25BBE9A9DA417C /* PBXContainerItemProxy */;
+		};
+		D545B4598D8906D7083DEA2D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A226BA2AD5F068777B904F90 /* FujikageQLThumbnail */;
+			targetProxy = AEDFBE14BEA743ED20BFBA2E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		008E7FA0967EB6B95685C23D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/Preview/Preview.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sources/Preview/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "FujikageQL Preview";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.epsalmond.fujikage.quicklook.preview;
+				PRODUCT_NAME = FujikageQLPreview;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		0D7651659752ED671758AC84 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Sources/Host/FujikageQL.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sources/Host/Info.plist;
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSHighResolutionCapable = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.epsalmond.fujikage.quicklook;
+				PRODUCT_NAME = FujikageQL;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		2EB565BA70777B0D5993782E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/Preview/Preview.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sources/Preview/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "FujikageQL Preview";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.epsalmond.fujikage.quicklook.preview;
+				PRODUCT_NAME = FujikageQLPreview;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		585E2B099875D1F4E4A0F2A0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/Thumbnail/Thumbnail.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sources/Thumbnail/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "FujikageQL Thumbnails";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.epsalmond.fujikage.quicklook.thumbnail;
+				PRODUCT_NAME = FujikageQLThumbnail;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		6804E583EA1FB97CE15DD9BF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.epsalmond.fujikage.quicklook.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FujikageQL.app/Contents/MacOS/FujikageQL";
+			};
+			name = Debug;
+		};
+		7F6C71CE0BF3D16707D6BA84 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Sources/Host/FujikageQL.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sources/Host/Info.plist;
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSHighResolutionCapable = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.epsalmond.fujikage.quicklook;
+				PRODUCT_NAME = FujikageQL;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		8B20ED19DC1CD0A4D1423917 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = KA3Y4C7M3R;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		C3922011C9058D90EFD2F15F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = KA3Y4C7M3R;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		D8C9D645BFF5A2ADB652B5C7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.epsalmond.fujikage.quicklook.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FujikageQL.app/Contents/MacOS/FujikageQL";
+			};
+			name = Release;
+		};
+		ECE75029CBFDB9E63163A59A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Sources/Thumbnail/Thumbnail.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sources/Thumbnail/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "FujikageQL Thumbnails";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.epsalmond.fujikage.quicklook.thumbnail;
+				PRODUCT_NAME = FujikageQLThumbnail;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0135855F93CB97EBBE9C854A /* Build configuration list for PBXProject "FujikageQL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B20ED19DC1CD0A4D1423917 /* Debug */,
+				C3922011C9058D90EFD2F15F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9CC96FC962683527A3C2A94E /* Build configuration list for PBXNativeTarget "FujikageQLPreview" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				008E7FA0967EB6B95685C23D /* Debug */,
+				2EB565BA70777B0D5993782E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A1E1DDD34E7F8597DA8413D9 /* Build configuration list for PBXNativeTarget "FujikageQLThumbnail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				585E2B099875D1F4E4A0F2A0 /* Debug */,
+				ECE75029CBFDB9E63163A59A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DAE197E53021C0855F71BBB9 /* Build configuration list for PBXNativeTarget "FujikageQLTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6804E583EA1FB97CE15DD9BF /* Debug */,
+				D8C9D645BFF5A2ADB652B5C7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E78CD61C8459EBFDE9FDFE7A /* Build configuration list for PBXNativeTarget "FujikageQL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0D7651659752ED671758AC84 /* Debug */,
+				7F6C71CE0BF3D16707D6BA84 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 69CC265548C4F073648C1B7A /* Project object */;
+}
