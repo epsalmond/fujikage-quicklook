@@ -124,16 +124,18 @@ final class IconFolderStore: ObservableObject {
         load()
     }
 
-    func addFolder() {
-        let ignore = NSEvent.modifierFlags.contains(.option)
+    func addFolder(kind: FolderKind = .stamp) {
         let panel = NSOpenPanel()
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
         panel.allowsMultipleSelection = false
-        panel.prompt = "Add"
+        panel.prompt = kind == .ignore ? "Exclude" : "Add"
         guard panel.runModal() == .OK, let url = panel.url else { return }
         do {
-            _ = try add(url: url, kind: ignore ? .ignore : .stamp)
+            _ = try add(url: url, kind: kind)
+            status = kind == .ignore
+                ? "Excluded \(url.lastPathComponent)."
+                : "Added \(url.lastPathComponent). Choose Apply thumbnails when ready."
         } catch {
             status = error.localizedDescription
         }
@@ -184,19 +186,24 @@ final class IconFolderStore: ObservableObject {
     func handleDrop(_ urls: [URL], ignore: Bool = false) {
         let dropped = urls.filter { IconStampPolicy.isStampableFolder($0) }
         guard !dropped.isEmpty else { return }
-        replaceJob {
-            for url in dropped {
-                if Task.isCancelled { break }
-                do {
-                    let folder = try self.add(url: url, kind: ignore ? .ignore : .stamp)
-                    if folder.kind == .stamp {
-                        await self.performStamp(folder)
-                    }
-                } catch {
-                    self.status = error.localizedDescription
-                }
+        var added = 0
+        for url in dropped {
+            do {
+                _ = try add(url: url, kind: ignore ? .ignore : .stamp)
+                added += 1
+            } catch {
+                status = error.localizedDescription
+                return
             }
         }
+        let noun = added == 1 ? "folder" : "folders"
+        status = ignore
+            ? "Excluded \(added) \(noun)."
+            : "Added \(added) \(noun). Choose Apply thumbnails when ready."
+    }
+
+    func clearStatus() {
+        status = ""
     }
 
     func stop() {
@@ -345,7 +352,7 @@ final class IconFolderStore: ObservableObject {
             status = note
             StampLog.notice("done \(folder.displayPath) \(note)")
         } catch {
-            note = error.stampDetail
+            note = error.localizedDescription
             status = note
             StampLog.error("job \(folder.displayPath) \(error.stampDetail)")
         }

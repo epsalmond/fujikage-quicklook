@@ -18,17 +18,17 @@ A thumbnail extension ships in the same bundle and range-reads the same JPEG. Qu
 
 Stamp local APFS and HFS+ if the icon grid stays empty. Finder icon view on those volumes still uses Apple's RAW thumbnailer for `com.fuji.raw-image` and does not ask FujikageQL. Stamp writes `com.apple.FinderInfo` plus an icns resource fork as extended attributes. Already-stamped files are skipped. RAF bytes do not change.
 
-Do not stamp network shares. On NFS, Finder asks the thumbnail extension and icons fill in with no xattrs. A stamp there would write `._` AppleDouble files. The host skips NFS unless ⋯ → ._ sidecars is on. macOS NFS writes `._` files, not ZFS attributes. SMB with vfs_fruit is the ZFS path.
+Do not apply custom thumbnails to network shares. On NFS, Finder asks the thumbnail extension and icons fill in with no xattrs. Applying them there would write `._` AppleDouble files. The host skips NFS unless `Allow ._ metadata files` is on. macOS NFS writes `._` files, not ZFS attributes. SMB with vfs_fruit is the ZFS path.
 
-The thumbnailer only runs on a Mac with FujikageQL enabled. Stamped icons travel with the file.
+The thumbnailer only runs on a Mac with FujikageQL enabled. Applied custom thumbnails travel with the file.
 
-SMB is untested for the thumbnailer. Try without stamping first. The host probes one SMB file before writing. FAT, exFAT, and File Provider skip unless sidecars are on.
+SMB is untested for the thumbnailer. Try without applying custom thumbnails first. The host probes one SMB file before writing. FAT, exFAT, and File Provider skip unless sidecars are on.
 
-Drop a folder on the window, or press +. Option-drop, or ⋯ → Ignore, adds a skip folder. Nested ignores sit under the stamp folder they exclude. Stamp walks the tree and skips those prefixes.
+Drop a folder on the window, or choose Add folder. The folder is added without changing its files. Choose Apply thumbnails to walk the tree. Option-drop, Add excluded folder, or Exclude this folder adds an exclusion. Nested exclusions sit under the folder they affect.
 
-Stamp also writes a `com.epsalmond.fujikage.stamp` xattr as provenance. ⋯ → Clear only removes icons that carry it, and only deletes a `._` sidecar the marker says we created. Icons set by Finder or another tool stay.
+Apply thumbnails also writes a `com.epsalmond.fujikage.stamp` xattr as provenance. Remove applied thumbnails only removes icons that carry it. It only deletes a `._` sidecar when the marker says FujikageQL created it. Icons set by Finder or another tool stay.
 
-AirDrop often lands files mode `0444`. Stamp adds owner-write for the attribute write, then restores the original mode.
+AirDrop often lands files mode `0444`. Applying thumbnails adds owner-write for the attribute write, then restores the original mode.
 
 ## Build
 
@@ -54,7 +54,7 @@ make test
 qlmanage -p /path/to/file.RAF
 ```
 
-Stamp failures are in `~/Library/Containers/com.epsalmond.fujikage.quicklook/Data/Library/Logs/stamp.log`. ⋯ → Open RAF extracts the same JPEG the preview extension uses.
+Thumbnail failures are in `~/Library/Containers/com.epsalmond.fujikage.quicklook/Data/Library/Logs/stamp.log`. `Choose a RAF…` extracts the same JPEG the preview extension uses.
 
 `FUJIKAGE_TEST_RAF=/path/to/DSCF0001.RAF make test` also runs the real-camera-file test; without it that test skips.
 

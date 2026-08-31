@@ -54,7 +54,7 @@ struct FujikageQLApp: App {
                 }
         }
         .windowStyle(.hiddenTitleBar)
-        .defaultSize(width: 520, height: 400)
+        .defaultSize(width: 620, height: 600)
         .windowResizability(.contentMinSize)
         .commands {
             CommandGroup(after: .newItem) {

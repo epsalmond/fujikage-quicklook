@@ -69,4 +69,20 @@ final class IconFolderStoreTests: XCTestCase {
         XCTAssertTrue(store.folders.isEmpty)
         XCTAssertTrue(IconFolderStore(defaults: defaults).folders.isEmpty)
     }
+
+    func testHandleDropStagesFolderWithoutStartingWork() throws {
+        let defaults = makeDefaults()
+        let store = IconFolderStore(defaults: defaults)
+        let folder = FileManager.default.temporaryDirectory
+            .appendingPathComponent("fkql-drop-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        addTeardownBlock { try? FileManager.default.removeItem(at: folder) }
+
+        store.handleDrop([folder])
+
+        XCTAssertEqual(store.folders.map(\.displayPath), [folder.path])
+        XCTAssertFalse(store.busy)
+        XCTAssertNil(store.progress)
+        XCTAssertEqual(store.status, "Added 1 folder. Choose Apply thumbnails when ready.")
+    }
 }

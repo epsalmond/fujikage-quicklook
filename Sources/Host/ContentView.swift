@@ -5,21 +5,29 @@ import UniformTypeIdentifiers
 struct ContentView: View {
     @EnvironmentObject private var iconStore: IconFolderStore
     @State private var preview: PreviewState?
+    @State private var pendingClear: IconFolder?
     @State private var dropTargeted = false
     @State private var dropIgnore = false
 
     var body: some View {
         VStack(spacing: 0) {
             header
-                .padding(.top, 10)
-                .padding(.horizontal, 14)
-                .padding(.bottom, 10)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 14)
 
-            folderArea
-                .padding(.horizontal, 14)
-                .padding(.bottom, iconStore.busy ? 8 : 14)
+            ScrollView {
+                VStack(spacing: 16) {
+                    quickLookCard
+                    if !iconStore.status.isEmpty {
+                        statusBanner
+                    }
+                    folderSection
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, iconStore.busy ? 54 : 20)
+            }
         }
-        .frame(minWidth: 480, minHeight: 340, alignment: .top)
+        .frame(minWidth: 560, minHeight: 500, alignment: .top)
         .background(Theme.background)
         .background(WindowConfigurator())
         .preferredColorScheme(.dark)
@@ -55,6 +63,18 @@ struct ContentView: View {
         .sheet(item: $preview) { item in
             PreviewSheet(state: item)
         }
+        .alert(item: $pendingClear) { folder in
+            Alert(
+                title: Text("Remove applied thumbnails?"),
+                message: Text(
+                    "This removes only thumbnails FujikageQL applied inside \(Self.shortName(folder.displayPath)) and its subfolders."
+                ),
+                primaryButton: .destructive(Text("Remove thumbnails")) {
+                    iconStore.clear(folder)
+                },
+                secondaryButton: .cancel()
+            )
+        }
         .onReceive(NotificationCenter.default.publisher(for: .openRAF)) { note in
             if let url = note.object as? URL {
                 load(url)
@@ -64,77 +84,142 @@ struct ContentView: View {
 
     private var header: some View {
         HStack(spacing: 8) {
+            AppIconMark()
+                .frame(width: 30, height: 30)
+            Text("FujikageQL")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(Theme.foreground)
+            Spacer(minLength: 8)
             Button {
                 if let url = URL(string: "https://fujikage.io/#quicklook") {
                     NSWorkspace.shared.open(url)
                 }
             } label: {
-                AppIconMark()
-                    .frame(width: 28, height: 28)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .help("fujikage.io")
-            Text("FujikageQL")
-                .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(Theme.foreground)
-            Spacer(minLength: 8)
-            Button {
-                iconStore.addFolder()
-            } label: {
-                Image(systemName: "plus")
+                Image(systemName: "questionmark.circle")
             }
             .buttonStyle(IconToolButtonStyle())
-            .help("Add folder")
-            .disabled(iconStore.busy)
-            Menu {
-                Button("Open RAF") { openRAF() }
-            } label: {
-                Image(systemName: "ellipsis")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(Theme.foreground2)
-                    .frame(width: 28, height: 28)
-                    .background(Theme.surface2)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(Theme.hairline, lineWidth: 1)
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-            }
-            .menuStyle(.borderlessButton)
-            .menuIndicator(.hidden)
-            .frame(width: 28, height: 28)
+            .help("FujikageQL help")
         }
     }
 
-    private var folderArea: some View {
-        Group {
+    private var quickLookCard: some View {
+        HStack(alignment: .top, spacing: 14) {
+            Image(systemName: "eye.fill")
+                .font(.system(size: 19, weight: .semibold))
+                .foregroundStyle(Theme.accent)
+                .frame(width: 36, height: 36)
+                .background(Theme.accent.opacity(0.13))
+                .clipShape(Circle())
+
+            VStack(alignment: .leading, spacing: 7) {
+                Text("Preview compressed Fujifilm RAF files")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(Theme.foreground)
+                Text("Select a RAF file in Finder and press Space. FujikageQL shows the JPEG stored in the file without rewriting the RAF image data.")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Theme.foreground2)
+                    .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 10) {
+                    Button("Choose a RAF…") { openRAF() }
+                        .buttonStyle(.borderedProminent)
+                    Text("If previews are missing, enable FujikageQL in System Settings › General › Login Items & Extensions.")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Theme.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Theme.surface2)
+        .overlay(
+            RoundedRectangle(cornerRadius: Theme.radiusMD)
+                .stroke(Theme.hairline, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: Theme.radiusMD))
+    }
+
+    private var statusBanner: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "info.circle.fill")
+                .foregroundStyle(Theme.accent)
+            Text(iconStore.status)
+                .font(.system(size: 12))
+                .foregroundStyle(Theme.foreground2)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 8)
+            Button {
+                iconStore.clearStatus()
+            } label: {
+                Image(systemName: "xmark")
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(Theme.muted)
+            .help("Dismiss")
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(Theme.surface2.opacity(0.72))
+        .clipShape(RoundedRectangle(cornerRadius: Theme.radiusSM))
+    }
+
+    private var folderSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Finder thumbnails")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Theme.foreground)
+                    Text("Optional. Apply thumbnails only when Finder's icon grid stays blank.")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Theme.muted)
+                }
+                Spacer(minLength: 12)
+                Menu {
+                    Button("Add folder…") { iconStore.addFolder() }
+                    Button("Add excluded folder…") { iconStore.addFolder(kind: .ignore) }
+                } label: {
+                    Label("Add folder", systemImage: "plus")
+                }
+                .menuStyle(.button)
+                .disabled(iconStore.busy)
+            }
+
             if iconStore.folders.isEmpty {
                 emptyDrop
             } else {
-                ScrollView {
-                    VStack(spacing: 8) {
-                        ForEach(iconStore.orderedFolders) { folder in
-                            folderRow(folder)
-                        }
+                VStack(spacing: 8) {
+                    ForEach(iconStore.orderedFolders) { folder in
+                        folderRow(folder)
                     }
                 }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var emptyDrop: some View {
-        ZStack {
+        VStack(spacing: 9) {
+            Image(systemName: dropIgnore ? "folder.badge.minus" : "folder.badge.plus")
+                .font(.system(size: 30, weight: .light))
+                .foregroundStyle(dropTargeted ? (dropIgnore ? Theme.muted : Theme.accent) : Theme.muted)
+            Text(dropIgnore ? "Drop to exclude this folder" : "No folders added")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(Theme.foreground2)
+            Text("Drop a folder here or choose Add folder. Nothing changes until you apply thumbnails.")
+                .font(.system(size: 12))
+                .foregroundStyle(Theme.muted)
+                .multilineTextAlignment(.center)
+        }
+        .padding(28)
+        .frame(maxWidth: .infinity, minHeight: 150)
+        .overlay(
             RoundedRectangle(cornerRadius: Theme.radiusMD)
                 .strokeBorder(
                     dropTargeted ? Theme.accent : Theme.hairline2,
                     style: StrokeStyle(lineWidth: 1, dash: [6, 5])
                 )
-            Image(systemName: dropIgnore ? "folder.badge.minus" : "folder.badge.plus")
-                .font(.system(size: 32, weight: .light))
-                .foregroundStyle(dropTargeted ? (dropIgnore ? Theme.muted : Theme.accent) : Theme.muted)
-        }
+        )
     }
 
     private var progressBar: some View {
@@ -184,39 +269,40 @@ struct ContentView: View {
                     .truncationMode(.middle)
                 if !ignore, !folder.lastNote.isEmpty {
                     Text(folder.lastNote)
-                        .font(.system(size: Theme.micro, design: .monospaced))
+                        .font(.system(size: 11))
                         .foregroundStyle(Theme.muted)
-                        .lineLimit(1)
+                        .lineLimit(2)
                         .truncationMode(.tail)
                 }
             }
             Spacer(minLength: 8)
             if !ignore {
-                Button("Stamp") { iconStore.stamp(folder) }
-                    .buttonStyle(AccentButtonStyle())
+                Button("Apply thumbnails") { iconStore.stamp(folder) }
+                    .buttonStyle(.borderedProminent)
                     .disabled(iconStore.busy)
             }
             Menu {
                 if ignore {
-                    Button("Stamp") { iconStore.setKind(folder, .stamp) }
+                    Button("Include for thumbnails") { iconStore.setKind(folder, .stamp) }
                 } else {
-                    Button("Ignore") { iconStore.setKind(folder, .ignore) }
+                    Button("Exclude this folder") { iconStore.setKind(folder, .ignore) }
+                    Divider()
                     Toggle(
-                        "._ sidecars",
+                        "Allow ._ metadata files",
                         isOn: Binding(
                             get: { folder.allowSidecars },
                             set: { iconStore.setAllowSidecars(folder, $0) }
                         )
                     )
-                    Button("Clear") { iconStore.clear(folder) }
+                    Button("Remove applied thumbnails…") { pendingClear = folder }
                 }
-                Button("Reveal") {
+                Button("Show in Finder") {
                     NSWorkspace.shared.activateFileViewerSelecting(
                         [URL(fileURLWithPath: folder.displayPath)]
                     )
                 }
                 Divider()
-                Button("Remove", role: .destructive) { iconStore.remove(folder) }
+                Button("Remove from list", role: .destructive) { iconStore.remove(folder) }
             } label: {
                 Image(systemName: "ellipsis")
                     .font(.system(size: 13, weight: .medium))
@@ -271,7 +357,11 @@ struct ContentView: View {
     private func load(_ url: URL) {
         do {
             let jpeg = try RAFEmbeddedJPEG.jpegData(from: url)
-            guard let image = NSImage(data: jpeg) else { return }
+            guard let image = NSImage(data: jpeg) else {
+                preview = nil
+                iconStore.status = "\(url.lastPathComponent): The embedded preview could not be displayed."
+                return
+            }
             let size = RAFEmbeddedJPEG.displaySize(ofJPEG: jpeg)
             let megabytes = Double(jpeg.count) / 1_048_576
             let sizeText: String
@@ -280,6 +370,7 @@ struct ContentView: View {
             } else {
                 sizeText = String(format: "%.1f MB", megabytes)
             }
+            iconStore.clearStatus()
             preview = PreviewState(name: url.lastPathComponent, image: image, summary: sizeText)
         } catch {
             preview = nil
@@ -319,5 +410,3 @@ private struct PreviewState: Identifiable {
     let image: NSImage
     let summary: String
 }
-
-
