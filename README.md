@@ -45,6 +45,8 @@ make install
 
 `make reset-ql` reloads Quick Look and Finder.
 
+For local preparation of universal GitHub-download and Mac App Store artifacts, see [Releasing](docs/releasing.md). The ordinary `make release` build uses development signing.
+
 If spacebar preview is missing: System Settings → General → Login Items & Extensions, enable FujikageQL.
 
 ## Check

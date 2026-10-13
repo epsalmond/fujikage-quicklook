@@ -5,7 +5,7 @@ INSTALL_DIR := $(HOME)/Applications
 TEAM := KA3Y4C7M3R
 SIGNING := DEVELOPMENT_TEAM=$(TEAM) CODE_SIGN_STYLE=Automatic CODE_SIGN_IDENTITY="Apple Development"
 
-.PHONY: generate test debug release install reset-ql
+.PHONY: generate test debug release install reset-ql release-script-test release-archive
 
 generate:
 	$(XCODEGEN) generate
@@ -19,6 +19,13 @@ debug: generate
 
 release: generate
 	xcodebuild -project FujikageQL.xcodeproj -scheme FujikageQL -configuration Release -derivedDataPath $(DERIVED) -destination 'platform=macOS,arch=arm64' $(SIGNING) CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO -allowProvisioningUpdates build
+
+# Local preparation only; see docs/releasing.md for separate distribution exports.
+release-script-test:
+	python3 -m unittest discover -s scripts/release -p 'test_*.py' -v
+
+release-archive:
+	python3 scripts/release/release.py --team $(TEAM) archive
 
 install: release
 	mkdir -p "$(INSTALL_DIR)"
