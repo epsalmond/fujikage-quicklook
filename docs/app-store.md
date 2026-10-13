@@ -26,7 +26,7 @@ The full app suite passed **54 tests with zero skips**, including the approved r
 
 The name and subtitle fit Apple’s 30-character limits. The App Store Connect category is **Photo & Video**; the native macOS bundle category in `project.yml` is separately named `public.app-category.photography`. The copyright field omits the symbol that App Store Connect adds. Verify the public URLs before entering them. [Apple’s app information reference](https://developer.apple.com/help/app-store-connect/reference/app-information/app-information) describes these fields.
 
-**Support contact still needed:** the support page provides GitHub Issues, but Apple’s [platform version reference](https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information) asks the Support URL to lead to actual contact information such as a legal address, email, or telephone number, as required by local law. Add an owner-approved public contact before treating that field as submission-ready. No contact email is invented here.
+The owner has chosen [GitHub Issues](https://github.com/epsalmond/fujikage-quicklook/issues) for public support, bug reports, and feature requests. Use the published support-page URL above in App Store Connect; that page directs users to GitHub Issues.
 
 ## Description
 
@@ -69,7 +69,7 @@ See the JPEG inside your Fujifilm RAF files in Quick Look. Add Finder thumbnails
 
 ## App Review information
 
-No sign-in or demo account is required. Enter the owner’s actual review contact name, email, and telephone number in App Store Connect; these are not supplied here.
+No sign-in or demo account is required. Enter the owner’s actual review contact name, email, and telephone number in App Store Connect. These private Apple review fields are separate from the public GitHub Issues support channel. The App Review telephone number remains pending owner input.
 
 After attaching the approved compressed RAF sample, use these review notes:
 
@@ -101,7 +101,7 @@ Apple’s current [Mac screenshot specifications](https://developer.apple.com/he
 - **Age rating and content rights:** complete the current questions in App Store Connect. The app displays user-selected local photos; do not infer a rating from camera-file support. Source inspection shows no ads, accounts, messaging, or in-app browsing. Confirm rights to all submitted screenshots, artwork, and the reviewer RAF.
 - **Export compliance:** no custom cryptography or network client was found in the inspected source. Confirm the final binary and answer the current encryption questions; no legal declaration is made by this draft.
 - **Accessibility claims:** no App Store accessibility claims are proposed without testing the release app against the relevant criteria.
-- **Build and contact:** confirm App Store Connect has finished processing build 1.0 (2), then select it for submission. Supply the approved public support email and actual App Review contact telephone number; these owner inputs remain unanswered. Signing, App ID registration, app record `6822129984`, agreements, and free availability in 175 regions are already complete.
+- **Build and private review contact:** confirm App Store Connect has finished processing build 1.0 (2), then select it for submission. Supply the actual App Review contact telephone number; that owner input remains unanswered. Public support is through GitHub Issues. Signing, App ID registration, app record `6822129984`, agreements, and free availability in 175 regions are already complete.
 - **Links:** use and verify the public URLs above before submission. The current in-app help button opens `https://fujikage.io/#quicklook`, which has no confirmed Quick Look section. These content changes do not modify that source URL or the built app.
 
 See [releasing.md](releasing.md) for archive, export, and release validation.

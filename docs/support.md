@@ -2,6 +2,8 @@
 
 FujikageQL brings Quick Look previews to Fujifilm `.raf` files, including compressed RAF files. It displays the JPEG stored in the file, rather than decoding RAW sensor data. It requires macOS 14 or later; support depends on a readable embedded JPEG, not a promise of compatibility with every camera or RAW format.
 
+For help, bug reports, and feature requests, use [GitHub Issues](https://github.com/epsalmond/fujikage-quicklook/issues). Search existing issues first, then open an issue if you need help with something not already covered.
+
 ## Preview a RAF
 
 1. Open FujikageQL after installing it.
@@ -27,7 +29,7 @@ Use Finder without applying custom thumbnails first on network shares. Finder ca
 
 The metadata-file option permits sidecars; it cannot make every filesystem or cloud provider preserve icons. Network files must remain reachable, and cloud files may need downloading by their provider.
 
-## Troubleshooting and contact
+## Troubleshooting and GitHub support
 
 If a saved folder becomes unavailable, remove it from the list and add it again. If an excluded folder cannot be opened, restore access or remove and re-add that exclusion before retrying. When reporting a preview problem, include the camera model, RAF compression mode if known, macOS version, app version, error text, and whether **Choose a RAF…** works. For thumbnail problems, also include the volume type and metadata-file setting.
 
@@ -39,4 +41,4 @@ Local thumbnail-operation diagnostics are at:
 
 The thumbnail extension also logs to macOS Console under `com.epsalmond.fujikage.quicklook`. Logs can contain full file paths.
 
-[Open a GitHub issue](https://github.com/epsalmond/fujikage-quicklook/issues/new) for help, bug reports, or feature requests. Issues are public; review photos and logs for private information before attaching them. See the [privacy page](privacy.md) for details on local settings, logs, and file metadata.
+[GitHub Issues](https://github.com/epsalmond/fujikage-quicklook/issues) is the support channel for FujikageQL. Issues are public; review photos and logs for private information before attaching them. See the [privacy page](privacy.md) for details on local settings, logs, and file metadata.
