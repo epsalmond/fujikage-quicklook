@@ -164,7 +164,7 @@ def verify_app(app, channel, team, expected_profiles=None):
     version = (host_info.get("CFBundleShortVersionString"), host_info.get("CFBundleVersion"))
     require(all(isinstance(value, str) and value.strip() for value in version), "Missing host version/build")
     if channel != "archive":
-        require(bool(host_info.get("NSHumanReadableCopyright", "").strip()), "Explicit copyright is required for distribution export")
+        require(bool(host_info.get("NSHumanReadableCopyright", "").strip()), "Copyright metadata is required for distribution export")
     for resource in ("Assets.car", "AppIcon.icns"):
         require((app / "Contents/Resources" / resource).is_file(), f"Missing release resource: {resource}")
     report = []
@@ -260,7 +260,7 @@ def main():
     commands = parser.add_subparsers(dest="command", required=True)
     archive = commands.add_parser("archive", help="Build a local universal archive; development signing is permitted at this stage")
     archive.add_argument("--archive", type=Path, default=ROOT / "build/release/FujikageQL.xcarchive")
-    archive.add_argument("--copyright", help="Owner-approved legal copyright text; required before distribution export")
+    archive.add_argument("--copyright", help="Override the approved copyright default in project.yml with owner-approved legal text")
     for command in ("preflight", "export"):
         sub = commands.add_parser(command)
         sub.add_argument("--channel", choices=("direct", "store"), required=True)
@@ -296,7 +296,7 @@ def main():
             archived_app = args.archive / "Products/Applications/FujikageQL.app"
             verify_app(archived_app, "archive", args.team)
             require(bool(read_plist(archived_app / "Contents/Info.plist").get("NSHumanReadableCopyright", "").strip()),
-                    "Rebuild the archive with --copyright containing owner-approved legal text before distribution export")
+                    "Rebuild the archive with the approved copyright default in project.yml or an owner-approved --copyright override before distribution export")
             require(not args.output.exists(), f"Export output already exists: {args.output}")
             args.output.mkdir(parents=True)
             options_path = args.output / "ExportOptions.plist"

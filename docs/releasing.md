@@ -14,13 +14,7 @@ python3 scripts/release/release.py verify --channel archive build/release/Fujika
 
 The archive uses the existing Apple Development identity and a generic macOS destination with both `arm64` and `x86_64`. The verifier checks the host plus `FujikageQLPreview.appex` and `FujikageQLThumbnail.appex`: identical version/build and signing team, both architectures, valid signatures, App Sandbox, extension identifiers, host file/bookmark permissions, extension-specific entitlements, no debugger entitlement, and required app assets. Archive validation permits development signatures and says so explicitly.
 
-An archive without approved copyright text can be used for preparation, but distribution export requires a new archive with the approved legal text:
-
-```sh
-python3 scripts/release/release.py archive \
-  --archive build/release/FujikageQL-ready.xcarchive \
-  --copyright 'OWNER-APPROVED LEGAL COPYRIGHT TEXT'
-```
+The approved copyright owner is Eric Psalmond. `project.yml` supplies `Copyright © 2026 Eric Psalmond` to the app and extensions, so the ordinary archive command includes it. For a separately approved legal change, the archive command's optional `--copyright` argument overrides that default. Distribution export rejects archives with missing copyright metadata; rebuild older archives rather than modifying a signed bundle.
 
 Use a new output path for every archive/export. The helper refuses to overwrite an existing output. Override the configured team with the global `--team TEAM_ID` argument before the subcommand; the identities and all three bundle identifiers/profiles must correspond to that team. Do not change version/build until the release owner confirms the intended version and, for the store, checks existing uploaded builds.
 
@@ -29,7 +23,7 @@ Use a new output path for every archive/export. The helper refuses to overwrite 
 ```sh
 python3 scripts/release/release.py preflight --channel direct
 python3 scripts/release/release.py export --channel direct \
-  --archive build/release/FujikageQL-ready.xcarchive \
+  --archive build/release/FujikageQL.xcarchive \
   --output build/release/direct
 ```
 
@@ -47,7 +41,7 @@ The helper ZIPs the exported app, waits for `notarytool --wait` to return `Accep
 
 A test on a second Mac is still needed to confirm download/quarantine behavior, enabling the Quick Look extensions, previewing a real compressed RAF, and applying/removing icons on disposable copies. Universal binary verification is not physical Intel-Mac validation.
 
-No updater is configured. A ZIP download is installed by moving the app to Applications; replace it there for future direct-download updates. GitHub repository ownership/name, public source visibility, license, release tag, release notes, and final download URL remain owner decisions. A public binary release does not resolve source licensing.
+No updater is configured. A ZIP download is installed by moving the app to Applications; replace it there for future direct-download updates. The approved public repository destination is [epsalmond/fujikage-quicklook](https://github.com/epsalmond/fujikage-quicklook). Repository creation/publication, the source license, release tag, release notes, and final download URL still need completion. Public source visibility does not select a source license; none has been chosen here.
 
 ## Mac App Store
 
@@ -55,7 +49,7 @@ No updater is configured. A ZIP download is installed by moving the app to Appli
 python3 scripts/release/release.py preflight --channel store
 
 python3 scripts/release/release.py export --channel store \
-  --archive build/release/FujikageQL-ready.xcarchive \
+  --archive build/release/FujikageQL.xcarchive \
   --output build/release/store
 ```
 
@@ -65,7 +59,7 @@ If profiles are needed or intentionally supplied, add `--profile BUNDLE_ID=INSTA
 
 Export uses `method=app-store-connect`, `destination=export`, manual signing, and `manageAppVersionAndBuildNumber=false`. The package must have a trusted store installer signature; its extracted app must pass store-signature, universal-binary, entitlement, and applicable provisioning checks. A checksum is written alongside the package.
 
-Upload with the owner's chosen Apple-supported tool only after authorization. Local package validation is not App Store Connect validation or App Review approval. The App Store Connect app record, bundle-ID registration, team agreements, price/availability, approved copyright, privacy answers/URL, support URL, screenshots, age rating, and reviewer sample are unresolved. Use a real compressed RAF sample that may legally be supplied to reviewers; none is committed in this repository.
+The approved Mac App Store price is free. Upload with the owner's chosen Apple-supported tool only after authorization. Local package validation is not App Store Connect validation or App Review approval. The App Store Connect app record, bundle-ID registration, team agreements, availability, privacy answers/URL, support URL, screenshots, age rating, and reviewer sample are unresolved. Use a real compressed RAF sample that may legally be supplied to reviewers; none is committed in this repository.
 
 ## Metadata and privacy draft
 
@@ -85,4 +79,4 @@ Review notes should explain how to enable FujikageQL in System Settings → Gene
 
 ## Current local limitations
 
-The local identity inventory during preparation contained Apple Development and Apple Distribution; no Developer ID Application or Mac Installer Distribution identity was present. No App Store Connect record, legal copyright, or release account inputs were confirmed. No distribution profiles were confirmed; they are optional for the current native App Store capabilities. The archive can therefore be prepared and verified, while direct export needs a Developer ID Application identity and store export needs a Mac Installer Distribution identity; both need approved copyright text. No upload, notarization submission, publication, installation, tag, or push was performed by this preparation work.
+The local identity inventory during preparation contained Apple Development and Apple Distribution; no Developer ID Application or Mac Installer Distribution identity was present. The public repository destination, free Mac App Store price, and Eric Psalmond copyright are confirmed. No App Store Connect record or release account inputs were confirmed. No distribution profiles were confirmed; they are optional for the current native App Store capabilities. The archive can therefore be prepared and verified, while direct export needs a Developer ID Application identity and store export needs a Mac Installer Distribution identity. No upload, notarization submission, publication, installation, tag, or push was performed by this preparation work.
