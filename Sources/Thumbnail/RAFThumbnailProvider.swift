@@ -23,9 +23,7 @@ final class RAFThumbnailProvider: QLThumbnailProvider {
             let imageSize = CGSize(width: image.width, height: image.height)
             let contextSize = RAFEmbeddedJPEG.aspectFit(imageSize, in: request.maximumSize)
             let reply = QLThumbnailReply(contextSize: contextSize, drawing: { context in
-                context.interpolationQuality = .high
-                context.draw(image, in: CGRect(origin: .zero, size: contextSize))
-                return true
+                RAFThumbnailDrawing.draw(image, in: context)
             })
             reply.extensionBadge = "RAF"
             handler(reply, nil)

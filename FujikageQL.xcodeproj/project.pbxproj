@@ -12,6 +12,7 @@
 		1E911965BE126EE846029A49 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFFA945EE4430085E8D6D73E /* Assets.xcassets */; };
 		201FB058E2ACD1692E7C6838 /* FujikageQLThumbnail.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C0F7934C80D0F0712A0D0B2A /* FujikageQLThumbnail.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		210EE01BBC4673B065DA59C2 /* IconFolderStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB20F85A4ADF6F68E498ED /* IconFolderStoreTests.swift */; };
+		343FE22771ABBBEB23E9BD3B /* RAFThumbnailDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F2CC51CA0C8B33270666A9 /* RAFThumbnailDrawing.swift */; };
 		3C27942CE302D9015F332B8C /* AppIconMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829E2C4CEDBE85BB25A4C052 /* AppIconMark.swift */; };
 		3D766EE5016EE3D4E46AE38B /* RAFThumbnailProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED8DB1389BC9CCD87DB5B14 /* RAFThumbnailProvider.swift */; };
 		4198F60EA934C470278D1ECF /* IconStamper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3243F85877FA6D8D7DBDCC21 /* IconStamper.swift */; };
@@ -19,11 +20,14 @@
 		491A0930BF742BB4CFB3703E /* IconStampPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E17846EEE57A0251CF4FD3 /* IconStampPolicy.swift */; };
 		55B0CBAEFE85C90CF3FB88B1 /* RAFEmbeddedJPEG.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDB52274CDC50A95AF1077D /* RAFEmbeddedJPEG.swift */; };
 		90C394DBB6C619503F545592 /* StampLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9480F1FB1C8E260C683B234 /* StampLog.swift */; };
+		93FB4E7AC5101A4A65C286E8 /* RAFThumbnailDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F2CC51CA0C8B33270666A9 /* RAFThumbnailDrawing.swift */; };
 		A427CC8AB810E1F1EF4FCA10 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463E8EDA5B356D0022556D5E /* Theme.swift */; };
 		A485F1D77C4C7188EE5EA556 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3B03CA0409382DB994D936 /* ContentView.swift */; };
 		A896DCFBDE5381DE3185E342 /* IconFolderStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A80C0746D911883D89387B /* IconFolderStore.swift */; };
 		C40F4BB9C4DFDB0BF190F8E4 /* IconStampPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883CFD1D35013286846F39CE /* IconStampPolicyTests.swift */; };
+		CF79137C158271E632212748 /* RAFThumbnailDrawingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8934201B628BC05C2220503 /* RAFThumbnailDrawingTests.swift */; };
 		D167D123F8B8A60149237FA7 /* FujikageQLApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93051EE90CAE7081FE35E2 /* FujikageQLApp.swift */; };
+		D23FA72596A2624AA62A9F9A /* RAFThumbnailDrawing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F2CC51CA0C8B33270666A9 /* RAFThumbnailDrawing.swift */; };
 		D6C62E6A33902DFB3A7E61D8 /* IconStamperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983752F85CB7C76A2A71C6DC /* IconStamperTests.swift */; };
 		DDBAA74CB5FC82E6E96D451C /* RAFEmbeddedJPEGTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE38E048BDE288B8556CC436 /* RAFEmbeddedJPEGTests.swift */; };
 		E29C6F3D535214824595C6C4 /* RAFEmbeddedJPEG.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDB52274CDC50A95AF1077D /* RAFEmbeddedJPEG.swift */; };
@@ -80,6 +84,7 @@
 		3FBF20F50702A8C439C07780 /* FujikageQLPreview.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FujikageQLPreview.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		43E17846EEE57A0251CF4FD3 /* IconStampPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconStampPolicy.swift; sourceTree = "<group>"; };
 		463E8EDA5B356D0022556D5E /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		49F2CC51CA0C8B33270666A9 /* RAFThumbnailDrawing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAFThumbnailDrawing.swift; sourceTree = "<group>"; };
 		50A80C0746D911883D89387B /* IconFolderStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconFolderStore.swift; sourceTree = "<group>"; };
 		5B1904C07C3740BBAAC5D04E /* FujikageQL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FujikageQL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6ED8DB1389BC9CCD87DB5B14 /* RAFThumbnailProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAFThumbnailProvider.swift; sourceTree = "<group>"; };
@@ -91,6 +96,7 @@
 		CFFA945EE4430085E8D6D73E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D157BC41554888017FFF8ECF /* FolderDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderDropView.swift; sourceTree = "<group>"; };
 		DE38E048BDE288B8556CC436 /* RAFEmbeddedJPEGTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAFEmbeddedJPEGTests.swift; sourceTree = "<group>"; };
+		E8934201B628BC05C2220503 /* RAFThumbnailDrawingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAFThumbnailDrawingTests.swift; sourceTree = "<group>"; };
 		EBDB52274CDC50A95AF1077D /* RAFEmbeddedJPEG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RAFEmbeddedJPEG.swift; sourceTree = "<group>"; };
 		F14CA5975893483BD5B7FF72 /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
 		F9480F1FB1C8E260C683B234 /* StampLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampLog.swift; sourceTree = "<group>"; };
@@ -102,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				EBDB52274CDC50A95AF1077D /* RAFEmbeddedJPEG.swift */,
+				49F2CC51CA0C8B33270666A9 /* RAFThumbnailDrawing.swift */,
 			);
 			path = RAFJPEG;
 			sourceTree = "<group>";
@@ -187,6 +194,7 @@
 				983752F85CB7C76A2A71C6DC /* IconStamperTests.swift */,
 				883CFD1D35013286846F39CE /* IconStampPolicyTests.swift */,
 				DE38E048BDE288B8556CC436 /* RAFEmbeddedJPEGTests.swift */,
+				E8934201B628BC05C2220503 /* RAFThumbnailDrawingTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -334,6 +342,7 @@
 			files = (
 				55B0CBAEFE85C90CF3FB88B1 /* RAFEmbeddedJPEG.swift in Sources */,
 				FD0D13410D7174DC861EE2EB /* RAFPreviewProvider.swift in Sources */,
+				D23FA72596A2624AA62A9F9A /* RAFThumbnailDrawing.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +358,7 @@
 				491A0930BF742BB4CFB3703E /* IconStampPolicy.swift in Sources */,
 				4198F60EA934C470278D1ECF /* IconStamper.swift in Sources */,
 				E29C6F3D535214824595C6C4 /* RAFEmbeddedJPEG.swift in Sources */,
+				343FE22771ABBBEB23E9BD3B /* RAFThumbnailDrawing.swift in Sources */,
 				90C394DBB6C619503F545592 /* StampLog.swift in Sources */,
 				A427CC8AB810E1F1EF4FCA10 /* Theme.swift in Sources */,
 				4367B42AF0F7558CBB945DC8 /* VolumeFacts.swift in Sources */,
@@ -364,6 +374,7 @@
 				C40F4BB9C4DFDB0BF190F8E4 /* IconStampPolicyTests.swift in Sources */,
 				D6C62E6A33902DFB3A7E61D8 /* IconStamperTests.swift in Sources */,
 				DDBAA74CB5FC82E6E96D451C /* RAFEmbeddedJPEGTests.swift in Sources */,
+				CF79137C158271E632212748 /* RAFThumbnailDrawingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,6 +383,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EEC121B97C22E2816746B41C /* RAFEmbeddedJPEG.swift in Sources */,
+				93FB4E7AC5101A4A65C286E8 /* RAFThumbnailDrawing.swift in Sources */,
 				3D766EE5016EE3D4E46AE38B /* RAFThumbnailProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -539,7 +551,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = KA3Y4C7M3R;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -614,7 +626,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = KA3Y4C7M3R;
 				ENABLE_HARDENED_RUNTIME = YES;
