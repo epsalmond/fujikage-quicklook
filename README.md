@@ -2,6 +2,8 @@
 
 macOS Quick Look host for Fujifilm `.raf`. Spacebar preview reads the JPEG Fuji already stored in the file. It does not decode the sensor payload. It does not rewrite the RAF data fork.
 
+[Support and usage](docs/support.md) · [Privacy](docs/privacy.md)
+
 Apple's Quick Look handles uncompressed RAF and fails on compressed RAF. This is a native Mac app. Fujikage on Mac is Designed for iPad, so that binary cannot host Quick Look extensions.
 
 ## Preview

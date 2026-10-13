@@ -63,21 +63,13 @@ Export uses `method=app-store-connect`, `destination=export`, manual signing, an
 
 The approved Mac App Store price is free. Upload with the owner's chosen Apple-supported tool only after authorization. Local package validation is not App Store Connect validation or App Review approval. The App Store Connect app record, bundle-ID registration, team agreements, availability, privacy answers/URL, support URL, screenshots, age rating, and reviewer sample are unresolved. Use a real compressed RAF sample that may legally be supplied to reviewers; none is committed in this repository.
 
-## Metadata and privacy draft
+## Metadata and public pages
 
-Suggested description, subject to owner review:
+[app-store.md](app-store.md) contains the description, keywords, subtitle, reviewer instructions, intended public URLs, and unresolved questionnaire/account facts. [support.md](support.md) provides usage and GitHub issue contact; [privacy.md](privacy.md) describes local processing, settings/bookmarks, path-bearing diagnostics, and Finder metadata writes. Publish the pages to the approved public repository and verify their URLs before submission. An owner-approved public contact is still needed to meet Apple's stated Support URL contact requirements.
 
-> Preview compressed Fujifilm RAF files in Quick Look and Finder. FujikageQL displays the full-size JPEG embedded in each RAF; it does not decode RAW sensor data. Optionally apply Finder icons to RAF files in selected folders. Requires macOS 14 or later.
+The App Privacy answer remains subject to the final binary and the owner's practices. Inspect the final archive's required-reason API usage and SDKs against Apple's current requirements, including `UserDefaults`. There are no declared third-party runtime dependencies; XcodeGen is a build tool.
 
-Suggested privacy disclosure prose, to review against the final binary and privacy form:
-
-> FujikageQL processes selected files locally. It saves folder selections, exclusions, and security-scoped bookmarks in local app settings. Local diagnostic logs include file names and paths. Applying thumbnails writes Finder metadata and extended attributes; depending on the volume and your metadata-file setting, this can also create AppleDouble `._` files. RAF image data is not rewritten. The source currently includes no networking or analytics client; opening the support link opens a website in your browser.
-
-Do not present this draft as an approved App Store privacy answer. No privacy manifest is added speculatively: inspect the final binary's required-reason API usage and SDKs against Apple's current submission requirements before upload. `UserDefaults` usage requires that inventory. There are no declared third-party runtime dependencies; XcodeGen is a build tool.
-
-The current in-app support link is `https://fujikage.io/#quicklook`; the homepage responds, but Quick Look support content at that anchor has not been confirmed. A `/privacy` page exists, but its applicability/content needs owner review. Approved screenshots should use a real RAF and the actual app; existing icon artwork is retained, with prior design decisions tracked separately.
-
-Review notes should explain how to enable FujikageQL in System Settings → General → Login Items & Extensions, preview the supplied compressed RAF with Finder Spacebar or “Choose a RAF…”, and test Apply/Remove thumbnails on a small duplicate RAF folder on local APFS. Avoid broad network-volume promises: NFS, SMB, removable filesystems, and File Provider have different behavior described in the README.
+The current in-app support link is `https://fujikage.io/#quicklook`; Quick Look content at that anchor has not been confirmed. The content pages do not modify that source URL. Screenshots and the App Review sample require an owner-approved real RAF before capture or sharing; the approved icon is retained.
 
 ## Current local limitations
 
