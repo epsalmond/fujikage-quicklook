@@ -33,6 +33,7 @@ SIGNING_KEYS = {
     "get-task-allow",
     "com.apple.security.get-task-allow",
 }
+RESTRICTED_KEYS = {"application-identifier", "com.apple.application-identifier", "keychain-access-groups"}
 
 
 class ReleaseError(Exception):
@@ -75,7 +76,7 @@ def signature(path):
             "entitlements": entitlements}
 
 
-def validate_profile(path, bundle_id, team):
+def validate_profile(path, bundle_id, team, entitlements, channel, expected_profile=None):
     profile = plistlib.loads(run(["security", "cms", "-D", "-i", str(path)], capture=True))
     require(team in profile.get("TeamIdentifier", []), f"Profile team mismatch: {path}")
     expiry = profile.get("ExpirationDate")
@@ -86,8 +87,35 @@ def validate_profile(path, bundle_id, team):
     require(app_id == f"{team}.{bundle_id}", f"Profile app identifier mismatch: {path}")
     require(not ent.get("get-task-allow") and not ent.get("com.apple.security.get-task-allow"),
             f"Development provisioning profile: {path}")
-    require(not profile.get("ProvisionedDevices") and not profile.get("ProvisionsAllDevices"),
-            f"Profile is not for App Store distribution: {path}")
+    require(not profile.get("ProvisionedDevices"), f"Device provisioning profile is not for distribution: {path}")
+    if channel == "store":
+        require(not profile.get("ProvisionsAllDevices"), f"Profile is not for App Store distribution: {path}")
+    else:
+        require(profile.get("ProvisionsAllDevices") is True, f"Profile is not for Developer ID distribution: {path}")
+    if expected_profile:
+        require(expected_profile in (profile.get("Name"), profile.get("UUID")),
+                f"Embedded profile does not match supplied name/UUID: {path}")
+    for key in RESTRICTED_KEYS & entitlements.keys():
+        claimed = entitlements[key]
+        allowed = ent.get(key)
+        if isinstance(claimed, list):
+            require(isinstance(allowed, list) and all(any(profile_value_matches(item, entry) for entry in allowed) for item in claimed),
+                    f"Profile does not authorize {key}: {path}")
+        else:
+            require(profile_value_matches(claimed, allowed), f"Profile does not authorize {key}: {path}")
+
+
+def profile_value_matches(claimed, allowed):
+    if isinstance(claimed, str) and isinstance(allowed, str) and allowed.endswith("*"):
+        return claimed.startswith(allowed[:-1])
+    return claimed == allowed
+
+
+def validate_optional_profile(path, bundle_id, team, entitlements, channel, expected_profile=None):
+    required = bool(RESTRICTED_KEYS & entitlements.keys()) or bool(expected_profile)
+    require(path.is_file() or not required, f"Missing profile for restricted entitlements or supplied profile: {bundle_id}")
+    if path.is_file():
+        validate_profile(path, bundle_id, team, entitlements, channel, expected_profile)
 
 
 def validate_bundle(info, archs, signed, *, expected_id, expected_version, team, channel, host):
@@ -129,7 +157,7 @@ def bundle_paths(app):
     return paths
 
 
-def verify_app(app, channel, team):
+def verify_app(app, channel, team, expected_profiles=None):
     app = Path(app).resolve()
     paths = bundle_paths(app)
     host_info = read_plist(app / "Contents/Info.plist")
@@ -152,8 +180,9 @@ def verify_app(app, channel, team):
             extension = info.get("NSExtension", {})
             expected_point = "com.apple.quicklook.preview" if name.endswith("Preview") else "com.apple.quicklook.thumbnail"
             require(extension.get("NSExtensionPointIdentifier") == expected_point, f"Wrong extension point: {name}")
-        if channel == "store":
-            validate_profile(path / "Contents/embedded.provisionprofile", bundle_id, team)
+        if channel != "archive":
+            validate_optional_profile(path / "Contents/embedded.provisionprofile", bundle_id, team,
+                                      signed["entitlements"], channel, (expected_profiles or {}).get(bundle_id))
         report.append({"bundle": name, "architectures": archs, "team": signed["team"], "authorities": signed["authorities"]})
     # Check nested code as well as each declared executable.
     run(["codesign", "--verify", "--all-architectures", "--deep", "--strict", str(app)], capture=True)
@@ -168,14 +197,15 @@ def require_identity(prefix, team, policy="codesigning"):
 
 
 def export_options(channel, team, profiles):
+    require(set(profiles) <= {entry[1] for entry in TARGETS.values()}, "Unknown provisioning-profile bundle identifier")
     options = {"method": "developer-id" if channel == "direct" else "app-store-connect",
                "destination": "export", "manageAppVersionAndBuildNumber": False,
                "teamID": team, "signingStyle": "manual",
                "signingCertificate": "Developer ID Application" if channel == "direct" else "Apple Distribution"}
     if channel == "store":
-        require(set(profiles) == {entry[1] for entry in TARGETS.values()},
-                "Store export requires --profile bundle-id=profile-name-or-UUID for the host and both extensions")
-        options.update(provisioningProfiles=profiles, installerSigningCertificate="Mac Installer Distribution")
+        options["installerSigningCertificate"] = "Mac Installer Distribution"
+    if profiles:
+        options["provisioningProfiles"] = profiles
     return options
 
 
@@ -192,7 +222,7 @@ def preflight(channel, team, profiles):
     return options
 
 
-def verify_package(package, team):
+def verify_package(package, team, expected_profiles=None):
     output = run(["pkgutil", "--check-signature", str(package)], capture=True).decode()
     require(any(status in output for status in ("Status: signed by a certificate trusted by macOS", "Status: signed by a certificate trusted by Mac OS X")),
             "Store package signature is not trusted")
@@ -203,7 +233,7 @@ def verify_package(package, team):
         run(["pkgutil", "--expand-full", str(package), str(expanded)], capture=True)
         apps = list(expanded.rglob("FujikageQL.app"))
         require(len(apps) == 1, "Expected exactly one FujikageQL.app inside store package")
-        verify_app(apps[0], "store", team)
+        verify_app(apps[0], "store", team, expected_profiles)
     print(f"Verified App Store export package: {package}")
 
 
@@ -273,13 +303,14 @@ def main():
             options_path.write_bytes(plistlib.dumps(options))
             run(["xcodebuild", "-exportArchive", "-archivePath", str(args.archive.resolve()),
                  "-exportPath", str(args.output.resolve()), "-exportOptionsPlist", str(options_path.resolve())])
+            profiles = profile_args(args.profile)
             if args.channel == "direct":
-                verify_app(args.output / "FujikageQL.app", "direct", args.team)
+                verify_app(args.output / "FujikageQL.app", "direct", args.team, profiles)
                 print("Developer ID export verified; notarization and stapling still required before public release.")
             else:
                 packages = list(args.output.glob("*.pkg"))
                 require(len(packages) == 1, "Expected exactly one App Store export package")
-                verify_package(packages[0], args.team)
+                verify_package(packages[0], args.team, profiles)
                 checksum(packages[0])
     elif args.command == "verify":
         if args.artifact.suffix == ".pkg":

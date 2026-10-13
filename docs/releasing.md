@@ -52,20 +52,18 @@ No updater is configured. A ZIP download is installed by moving the app to Appli
 ## Mac App Store
 
 ```sh
-python3 scripts/release/release.py preflight --channel store \
-  --profile com.epsalmond.fujikage.quicklook=HOST_DISTRIBUTION_PROFILE \
-  --profile com.epsalmond.fujikage.quicklook.preview=PREVIEW_DISTRIBUTION_PROFILE \
-  --profile com.epsalmond.fujikage.quicklook.thumbnail=THUMBNAIL_DISTRIBUTION_PROFILE
+python3 scripts/release/release.py preflight --channel store
 
 python3 scripts/release/release.py export --channel store \
   --archive build/release/FujikageQL-ready.xcarchive \
-  --output build/release/store \
-  --profile com.epsalmond.fujikage.quicklook=HOST_DISTRIBUTION_PROFILE \
-  --profile com.epsalmond.fujikage.quicklook.preview=PREVIEW_DISTRIBUTION_PROFILE \
-  --profile com.epsalmond.fujikage.quicklook.thumbnail=THUMBNAIL_DISTRIBUTION_PROFILE
+  --output build/release/store
 ```
 
-The local preflight requires Apple Distribution and Mac Installer Distribution identities with their private keys. Supply an installed App Store distribution profile name or UUID for each executable. Xcode checks local profile availability during export; the verifier checks embedded profile expiry, team/application identifier, and rejects development/device profiles. Export uses `method=app-store-connect`, `destination=export`, manual signing, and `manageAppVersionAndBuildNumber=false`. The package must have a trusted store installer signature; its extracted app must pass store-signature, universal-binary, entitlement, and provisioning checks. A checksum is written alongside the package.
+The local preflight requires Apple Distribution and Mac Installer Distribution identities with their private keys. The current app uses unrestricted sandbox/file/bookmark entitlements, so native Mac App Store distribution can omit provisioning profiles. Apple's [TN3125](https://developer.apple.com/documentation/technotes/tn3125-inside-code-signing-provisioning-profiles) explains that profiles become necessary for restricted entitlements; TestFlight always requires them. This helper prepares native App Store packages and does not support TestFlight export.
+
+If profiles are needed or intentionally supplied, add `--profile BUNDLE_ID=INSTALLED_PROFILE_NAME_OR_UUID` to the export command for each affected executable: `com.epsalmond.fujikage.quicklook`, `.quicklook.preview`, and `.quicklook.thumbnail`. Xcode checks local profile availability during export. The verifier requires the corresponding embedded profile for every supplied mapping or restricted entitlement, validates any embedded profile even if none was supplied, and checks expiry, team/application identifier, entitlement authorization, and distribution type. A supplied name/UUID must match the embedded profile. New capabilities outside the helper's existing entitlement allowlist are rejected until reviewed.
+
+Export uses `method=app-store-connect`, `destination=export`, manual signing, and `manageAppVersionAndBuildNumber=false`. The package must have a trusted store installer signature; its extracted app must pass store-signature, universal-binary, entitlement, and applicable provisioning checks. A checksum is written alongside the package.
 
 Upload with the owner's chosen Apple-supported tool only after authorization. Local package validation is not App Store Connect validation or App Review approval. The App Store Connect app record, bundle-ID registration, team agreements, price/availability, approved copyright, privacy answers/URL, support URL, screenshots, age rating, and reviewer sample are unresolved. Use a real compressed RAF sample that may legally be supplied to reviewers; none is committed in this repository.
 
@@ -87,4 +85,4 @@ Review notes should explain how to enable FujikageQL in System Settings → Gene
 
 ## Current local limitations
 
-The local identity inventory during preparation contained Apple Development and Apple Distribution; no Developer ID Application or Mac Installer Distribution identity was present. No distribution profiles, App Store Connect record, legal copyright, or release account inputs were confirmed. The archive can therefore be prepared and verified, while both distribution exports remain blocked on those inputs. No upload, notarization submission, publication, installation, tag, or push was performed by this preparation work.
+The local identity inventory during preparation contained Apple Development and Apple Distribution; no Developer ID Application or Mac Installer Distribution identity was present. No App Store Connect record, legal copyright, or release account inputs were confirmed. No distribution profiles were confirmed; they are optional for the current native App Store capabilities. The archive can therefore be prepared and verified, while direct export needs a Developer ID Application identity and store export needs a Mac Installer Distribution identity; both need approved copyright text. No upload, notarization submission, publication, installation, tag, or push was performed by this preparation work.

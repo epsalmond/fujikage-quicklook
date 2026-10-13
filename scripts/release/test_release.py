@@ -1,8 +1,11 @@
 """Release validation regressions; no keychain, network, or signing mutation."""
 
 import copy
+import datetime
+import plistlib
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 import release
@@ -81,9 +84,75 @@ class ReleaseValidationTests(unittest.TestCase):
         self.assertEqual(release.export_options("direct", release.DEFAULT_TEAM, {})["method"], "developer-id")
         self.assertEqual(release.export_options("store", release.DEFAULT_TEAM, profiles)["method"], "app-store-connect")
 
-    def test_store_requires_all_three_profile_inputs(self):
-        with self.assertRaisesRegex(release.ReleaseError, "host and both extensions"):
-            release.export_options("store", release.DEFAULT_TEAM, {release.BUNDLE_ID: "only-host"})
+    def test_native_store_can_export_current_unrestricted_entitlements_without_profiles(self):
+        options = release.export_options("store", release.DEFAULT_TEAM, {})
+        self.assertNotIn("provisioningProfiles", options)
+        with tempfile.TemporaryDirectory() as temp, patch.object(release, "validate_profile") as validate:
+            release.validate_optional_profile(Path(temp) / "missing.provisionprofile", release.BUNDLE_ID,
+                                              release.DEFAULT_TEAM, self.signed["entitlements"], "store")
+            validate.assert_not_called()
+
+    def test_present_store_profile_is_always_validated(self):
+        with tempfile.TemporaryDirectory() as temp, patch.object(release, "validate_profile") as validate:
+            path = Path(temp) / "embedded.provisionprofile"
+            path.touch()
+            release.validate_optional_profile(path, release.BUNDLE_ID, release.DEFAULT_TEAM,
+                                              self.signed["entitlements"], "store")
+            validate.assert_called_once_with(path, release.BUNDLE_ID, release.DEFAULT_TEAM,
+                                             self.signed["entitlements"], "store", None)
+
+    def test_restricted_entitlement_requires_profile(self):
+        with tempfile.TemporaryDirectory() as temp:
+            entitlements = dict(self.signed["entitlements"], **{"keychain-access-groups": [release.DEFAULT_TEAM + "." + release.BUNDLE_ID]})
+            with self.assertRaisesRegex(release.ReleaseError, "Missing profile for restricted"):
+                release.validate_optional_profile(Path(temp) / "missing.provisionprofile", release.BUNDLE_ID,
+                                                  release.DEFAULT_TEAM, entitlements, "store")
+
+    def test_supplied_profile_must_be_embedded(self):
+        with tempfile.TemporaryDirectory() as temp:
+            with self.assertRaisesRegex(release.ReleaseError, "Missing profile"):
+                release.validate_optional_profile(Path(temp) / "missing.provisionprofile", release.BUNDLE_ID,
+                                                  release.DEFAULT_TEAM, self.signed["entitlements"], "store", "Supplied Profile")
+
+    def test_unknown_profile_bundle_identifier_rejected(self):
+        with self.assertRaisesRegex(release.ReleaseError, "Unknown provisioning-profile bundle"):
+            release.export_options("store", release.DEFAULT_TEAM, {"com.example.unrelated": "Wrong App"})
+
+    def test_profile_authorization_respects_prefix_wildcard(self):
+        self.assertTrue(release.profile_value_matches("TEAM.app", "TEAM.*"))
+        self.assertFalse(release.profile_value_matches("OTHER.app", "TEAM.*"))
+
+    def test_valid_embedded_distribution_profile(self):
+        claimed = {"keychain-access-groups": [release.DEFAULT_TEAM + "." + release.BUNDLE_ID]}
+        profile = {"TeamIdentifier": [release.DEFAULT_TEAM], "Name": "Store Profile", "UUID": "profile-uuid",
+                   "ExpirationDate": datetime.datetime.now() + datetime.timedelta(days=1),
+                   "Entitlements": {"com.apple.application-identifier": release.DEFAULT_TEAM + "." + release.BUNDLE_ID,
+                                    "keychain-access-groups": [release.DEFAULT_TEAM + ".*"]}}
+        with patch.object(release, "run", return_value=plistlib.dumps(profile)):
+            release.validate_profile(Path("embedded.provisionprofile"), release.BUNDLE_ID, release.DEFAULT_TEAM,
+                                     claimed, "store", "profile-uuid")
+
+    def test_embedded_profile_rejects_invalid_distribution_authorization(self):
+        profile = {"TeamIdentifier": [release.DEFAULT_TEAM], "Name": "Store Profile", "UUID": "profile-uuid",
+                   "ExpirationDate": datetime.datetime.now() + datetime.timedelta(days=1),
+                   "Entitlements": {"com.apple.application-identifier": release.DEFAULT_TEAM + "." + release.BUNDLE_ID,
+                                    "keychain-access-groups": [release.DEFAULT_TEAM + ".*"]}}
+        cases = {
+            "wrong team": {"TeamIdentifier": ["OTHER"]},
+            "expired": {"ExpirationDate": datetime.datetime.now() - datetime.timedelta(days=1)},
+            "devices": {"ProvisionedDevices": ["device-id"]},
+            "developer id": {"ProvisionsAllDevices": True},
+            "wrong app": {"Entitlements": dict(profile["Entitlements"], **{"com.apple.application-identifier": release.DEFAULT_TEAM + ".other"})},
+            "debugger": {"Entitlements": dict(profile["Entitlements"], **{"com.apple.security.get-task-allow": True})},
+            "unauthorized keychain": {"Entitlements": dict(profile["Entitlements"], **{"keychain-access-groups": ["OTHER.*"]})},
+            "wrong selector": {"Name": "Other", "UUID": "other-uuid"},
+        }
+        claimed = {"keychain-access-groups": [release.DEFAULT_TEAM + "." + release.BUNDLE_ID]}
+        for label, changes in cases.items():
+            with self.subTest(label=label), patch.object(release, "run", return_value=plistlib.dumps(dict(profile, **changes))):
+                with self.assertRaises(release.ReleaseError):
+                    release.validate_profile(Path("embedded.provisionprofile"), release.BUNDLE_ID, release.DEFAULT_TEAM,
+                                             claimed, "store", "profile-uuid")
 
     def test_duplicate_profile_input_rejected(self):
         with self.assertRaisesRegex(release.ReleaseError, "once"):
