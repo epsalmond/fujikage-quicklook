@@ -92,6 +92,48 @@ class ReleaseValidationTests(unittest.TestCase):
                                               release.DEFAULT_TEAM, self.signed["entitlements"], "store")
             validate.assert_not_called()
 
+    def test_store_preflight_resolves_legacy_installer_certificate_to_sha1(self):
+        digest = "1234567890ABCDEF1234567890ABCDEF12345678"
+        for name in ("3rd Party Mac Developer Installer", "Mac Installer Distribution"):
+            output = f'  1) {digest} "{name}: Owner ({release.DEFAULT_TEAM})"\n'
+            with self.subTest(name=name), patch.object(release, "require_identity"), patch.object(release, "run", return_value=output.encode()):
+                options = release.preflight("store", release.DEFAULT_TEAM, {})
+                self.assertEqual(options["installerSigningCertificate"], digest)
+
+    def test_installer_selector_rejects_wrong_team_and_noninstaller_identities(self):
+        digest = "1234567890ABCDEF1234567890ABCDEF12345678"
+        for name, team in (("3rd Party Mac Developer Installer", "OTHERTEAM"),
+                           ("Apple Distribution", release.DEFAULT_TEAM)):
+            output = f'  1) {digest} "{name}: Owner ({team})"\n'
+            with self.subTest(name=name, team=team), self.assertRaisesRegex(release.ReleaseError, "Missing Mac Installer"):
+                release.installer_identity(output, release.DEFAULT_TEAM)
+
+    def test_installer_selector_requires_valid_sha1_identity_line(self):
+        output = f'  1) INVALID "3rd Party Mac Developer Installer: Owner ({release.DEFAULT_TEAM})"\n'
+        with self.assertRaisesRegex(release.ReleaseError, "Missing Mac Installer"):
+            release.installer_identity(output, release.DEFAULT_TEAM)
+
+    def test_store_package_accepts_apple_issued_store_installer_status(self):
+        output = ('Package "FujikageQL.pkg":\n'
+                  '   Status: signed by a developer certificate issued by Apple (Development)\n'
+                  '   Certificate Chain:\n'
+                  f'    1. 3rd Party Mac Developer Installer: Owner ({release.DEFAULT_TEAM})\n'
+                  '    2. Apple Worldwide Developer Relations Certification Authority\n'
+                  '    3. Apple Root CA\n')
+        release.validate_package_signature(output, release.DEFAULT_TEAM)
+        for status in ("no signature", "signed by an untrusted certificate", "signed by a certificate that has since expired"):
+            with self.subTest(status=status), self.assertRaisesRegex(release.ReleaseError, "not trusted"):
+                release.validate_package_signature(output.replace("signed by a developer certificate issued by Apple (Development)", status), release.DEFAULT_TEAM)
+
+    def test_store_package_requires_matching_installer_leaf(self):
+        for leaf in (f"Apple Development: Owner ({release.DEFAULT_TEAM})",
+                     "3rd Party Mac Developer Installer: Other (OTHERTEAM)"):
+            output = ('   Status: signed by a developer certificate issued by Apple (Development)\n'
+                      f'    1. {leaf}\n'
+                      f'    2. 3rd Party Mac Developer Installer: Owner ({release.DEFAULT_TEAM})\n')
+            with self.subTest(leaf=leaf), self.assertRaisesRegex(release.ReleaseError, "Wrong store installer"):
+                release.validate_package_signature(output, release.DEFAULT_TEAM)
+
     def test_present_store_profile_is_always_validated(self):
         with tempfile.TemporaryDirectory() as temp, patch.object(release, "validate_profile") as validate:
             path = Path(temp) / "embedded.provisionprofile"

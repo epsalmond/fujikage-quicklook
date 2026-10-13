@@ -209,25 +209,44 @@ def export_options(channel, team, profiles):
     return options
 
 
+def installer_identity(output, team):
+    # Xcode does not always resolve its generic certificate selector to the
+    # legacy displayed name. A valid identity's SHA-1 works for either name.
+    pattern = (r'^\s*\d+\)\s+([0-9A-Fa-f]{40})\s+"'
+               r'(?:3rd Party Mac Developer Installer|Mac Installer Distribution): '
+               r'[^"\n]+ \(' + re.escape(team) + r'\)"\s*$')
+    match = re.search(pattern, output, re.M)
+    require(match is not None, f"Missing Mac Installer Distribution identity with private key for team {team}")
+    return match.group(1).upper()
+
+
 def preflight(channel, team, profiles):
     options = export_options(channel, team, profiles)
     require_identity(options["signingCertificate"] + ":", team)
     if channel == "store":
         # Installer certificates use the older displayed name on many keychains.
         output = run(["security", "find-identity", "-v", "-p", "basic"], capture=True).decode()
-        require(any(("3rd Party Mac Developer Installer:" in line or "Mac Installer Distribution:" in line)
-                    and f"({team})" in line for line in output.splitlines()),
-                f"Missing Mac Installer Distribution identity with private key for team {team}")
+        options["installerSigningCertificate"] = installer_identity(output, team)
     print(f"Local {channel} signing preflight passed; profile availability is checked by Xcode during export.")
     return options
 
 
+def validate_package_signature(output, team):
+    # pkgutil labels Mac App Store installer certificates as (Development),
+    # despite their distribution purpose. Developer ID uses the trusted wording.
+    accepted = {"signed by a certificate trusted by macOS",
+                "signed by a certificate trusted by Mac OS X",
+                "signed by a developer certificate issued by Apple (Development)"}
+    status = re.search(r"^\s*Status: (.+)$", output, re.M)
+    require(status is not None and status.group(1).strip() in accepted, "Store package signature is not trusted")
+    leaf = re.search(r"^\s*1\. (.+)$", output, re.M)
+    require(leaf is not None and leaf.group(1).startswith(("3rd Party Mac Developer Installer:", "Mac Installer Distribution:"))
+            and leaf.group(1).endswith(f"({team})"), "Wrong store installer signature/team")
+
+
 def verify_package(package, team, expected_profiles=None):
     output = run(["pkgutil", "--check-signature", str(package)], capture=True).decode()
-    require(any(status in output for status in ("Status: signed by a certificate trusted by macOS", "Status: signed by a certificate trusted by Mac OS X")),
-            "Store package signature is not trusted")
-    require(any(("3rd Party Mac Developer Installer:" in line or "Mac Installer Distribution:" in line)
-                and f"({team})" in line for line in output.splitlines()), "Wrong store installer signature/team")
+    validate_package_signature(output, team)
     with tempfile.TemporaryDirectory(prefix="fujikageql-package-") as temp:
         expanded = Path(temp) / "expanded"
         run(["pkgutil", "--expand-full", str(package), str(expanded)], capture=True)
