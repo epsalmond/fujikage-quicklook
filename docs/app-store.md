@@ -1,6 +1,6 @@
 # Mac App Store submission text
 
-Prepared for FujikageQL 1.0, build 2. This is a local submission draft; account answers and assets below still need completion before submission. Public URLs become usable after these files are published in the approved repository’s default branch. No new hosting is required.
+Prepared for FujikageQL 1.0, build 2. Signing and App ID setup are complete. App Store Connect record `6822129984` exists, the required agreements are complete, and free availability is configured in 175 regions. The public repository exists. Build processing, submission assets, contact details, questionnaire entries, and publication of these pages remain to be completed. No new hosting is required.
 
 ## Metadata
 
@@ -13,7 +13,8 @@ Prepared for FujikageQL 1.0, build 2. This is a local submission draft; account 
 | Minimum macOS | 14.0 |
 | Version / build | 1.0 / 2 |
 | Bundle ID | `com.epsalmond.fujikage.quicklook` |
-| Primary category | Photography |
+| App Store Connect Apple ID | `6822129984` |
+| Primary category | Photo & Video |
 | Secondary category | Leave unset |
 | Price | Free |
 | Copyright field | `2026 Eric Psalmond` |
@@ -21,7 +22,7 @@ Prepared for FujikageQL 1.0, build 2. This is a local submission draft; account 
 | Privacy Policy URL | `https://github.com/epsalmond/fujikage-quicklook/blob/main/docs/privacy.md` |
 | Marketing URL | `https://github.com/epsalmond/fujikage-quicklook` |
 
-The name and subtitle fit Apple’s 30-character limits. Photography matches the category in `project.yml`. The copyright field omits the symbol that App Store Connect adds. Verify the public default branch is `main` before entering the URLs. [Apple’s app information reference](https://developer.apple.com/help/app-store-connect/reference/app-information/app-information) describes these fields.
+The name and subtitle fit Apple’s 30-character limits. The App Store Connect category is **Photo & Video**; the native macOS bundle category in `project.yml` is separately named `public.app-category.photography`. The copyright field omits the symbol that App Store Connect adds. Publish these pages and verify the public URLs before entering them. [Apple’s app information reference](https://developer.apple.com/help/app-store-connect/reference/app-information/app-information) describes these fields.
 
 **Support contact still needed:** the support page provides GitHub Issues, but Apple’s [platform version reference](https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information) asks the Support URL to lead to actual contact information such as a legal address, email, or telephone number, as required by local law. Add an owner-approved public contact before treating that field as submission-ready. No contact email is invented here.
 
@@ -91,14 +92,14 @@ Capture the actual release app: a Finder Quick Look preview, the app’s embedde
 
 Apple’s current [Mac screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications) require 16:10 images at 1280 × 800, 1440 × 900, 2560 × 1600, or 2880 × 1800 pixels. Use one accepted size consistently and inspect every screenshot for private paths or unrelated desktop content. No screenshots have been generated or uploaded.
 
-## Questionnaire and account facts still unresolved
+## Remaining submission items
 
-- **App Privacy:** inspected source has local RAF/JPEG processing, local settings/bookmarks, local path-bearing diagnostics, and no analytics or built-in network client. “Data Not Collected” is the proposed answer for the app, subject to the final binary and the owner’s actual practices. Apple excludes processing solely on-device from collection; independently assess any information the owner obtains through support, websites, Apple services, or future SDKs against [Apple’s privacy definitions](https://developer.apple.com/app-store/app-privacy-details/). The support/privacy pages describe browser links and voluntary public issue reports separately.
-- **Privacy manifest:** confirm the final archive contains the appropriate required-reason declarations for its actual API usage, including `UserDefaults`. The questionnaire does not replace that archive check.
+- **App Privacy questionnaire:** enter **Data Not Collected**. Source inspection establishes local RAF/JPEG processing, local settings/bookmarks, local path-bearing diagnostics, no accounts, no analytics or built-in network client, and no photo uploads. Apple excludes processing solely on-device from collection, supporting this answer under [Apple’s privacy definitions](https://developer.apple.com/app-store/app-privacy-details/). The support/privacy pages describe external browser links and voluntary public issue reports separately.
+- **Privacy-manifest scope:** Apple’s [privacy-manifest documentation](https://developer.apple.com/documentation/bundleresources/privacy-manifest-files) requires declarations for required-reason APIs on iOS, iPadOS, tvOS, visionOS, and watchOS; native macOS is excluded from that requirement. This app’s `UserDefaults` usage therefore does not create a required-reason manifest prerequisite for submission. Data-collection disclosures apply on every platform; the inspected app collects no data and includes no third-party runtime SDKs.
 - **Age rating and content rights:** complete the current questions in App Store Connect. The app displays user-selected local photos; do not infer a rating from camera-file support. Source inspection shows no ads, accounts, messaging, or in-app browsing. Confirm rights to all submitted screenshots, artwork, and the reviewer RAF.
 - **Export compliance:** no custom cryptography or network client was found in the inspected source. Confirm the final binary and answer the current encryption questions; no legal declaration is made by this draft.
 - **Accessibility claims:** no App Store accessibility claims are proposed without testing the release app against the relevant criteria.
-- **Account and distribution:** confirm the app record/SKU, bundle registration, build 2 availability, agreements, territories, release timing, public support contact, and actual App Review contact. The approved price is free; regional or account declarations remain owner decisions.
+- **Build and contact:** confirm App Store Connect has finished processing build 1.0 (2), then select it for submission. Supply the approved public support email and actual App Review contact telephone number; these owner inputs remain unanswered. Signing, App ID registration, app record `6822129984`, agreements, and free availability in 175 regions are already complete.
 - **Links:** publish and verify these public pages before submission. The current in-app help button opens `https://fujikage.io/#quicklook`, which has no confirmed Quick Look section. These content changes do not modify that source URL or the built app.
 
 See [releasing.md](releasing.md) for archive, export, and release validation.

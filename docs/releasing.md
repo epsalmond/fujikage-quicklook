@@ -41,7 +41,7 @@ The helper ZIPs the exported app, waits for `notarytool --wait` to return `Accep
 
 A test on a second Mac is still needed to confirm download/quarantine behavior, enabling the Quick Look extensions, previewing a real compressed RAF, and applying/removing icons on disposable copies. Universal binary verification is not physical Intel-Mac validation.
 
-No updater is configured. A ZIP download is installed by moving the app to Applications; replace it there for future direct-download updates. The approved public repository destination is [epsalmond/fujikage-quicklook](https://github.com/epsalmond/fujikage-quicklook). Repository creation/publication, the source license, release tag, release notes, and final download URL still need completion. Public source visibility does not select a source license; none has been chosen here.
+No updater is configured. A ZIP download is installed by moving the app to Applications; replace it there for future direct-download updates. The public repository [epsalmond/fujikage-quicklook](https://github.com/epsalmond/fujikage-quicklook) has been created. Publish release notes and verified assets there when completing the release. Public source visibility does not select a source license; none has been chosen here.
 
 ## Mac App Store
 
@@ -61,16 +61,18 @@ If profiles are needed or intentionally supplied, add `--profile BUNDLE_ID=INSTA
 
 Export uses `method=app-store-connect`, `destination=export`, manual signing, and `manageAppVersionAndBuildNumber=false`. The package must have a trusted store installer signature; its extracted app must pass store-signature, universal-binary, entitlement, and applicable provisioning checks. A checksum is written alongside the package.
 
-The approved Mac App Store price is free. Upload with the owner's chosen Apple-supported tool only after authorization. Local package validation is not App Store Connect validation or App Review approval. The App Store Connect app record, bundle-ID registration, team agreements, availability, privacy answers/URL, support URL, screenshots, age rating, and reviewer sample are unresolved. Use a real compressed RAF sample that may legally be supplied to reviewers; none is committed in this repository.
+The Mac App Store price is configured as free in 175 regions. App Store Connect record `6822129984`, App ID registration, signing setup, and required agreements are complete. Local package validation is not App Store Connect processing or App Review approval. Complete build processing, questionnaire entries, public support/privacy pages, contact details, screenshots, and the reviewer sample before submission. Use a real compressed RAF sample that may legally be supplied to reviewers; none is committed in this repository.
 
 ## Metadata and public pages
 
 [app-store.md](app-store.md) contains the description, keywords, subtitle, reviewer instructions, intended public URLs, and unresolved questionnaire/account facts. [support.md](support.md) provides usage and GitHub issue contact; [privacy.md](privacy.md) describes local processing, settings/bookmarks, path-bearing diagnostics, and Finder metadata writes. Publish the pages to the approved public repository and verify their URLs before submission. An owner-approved public contact is still needed to meet Apple's stated Support URL contact requirements.
 
-The App Privacy answer remains subject to the final binary and the owner's practices. Inspect the final archive's required-reason API usage and SDKs against Apple's current requirements, including `UserDefaults`. There are no declared third-party runtime dependencies; XcodeGen is a build tool.
+The source-supported App Privacy answer is **Data Not Collected**: RAF/JPEG processing, settings/bookmarks, and diagnostic logs stay on-device, and the app includes no analytics, built-in network client, or photo uploads. Apple’s [privacy definitions](https://developer.apple.com/app-store/app-privacy-details/) exclude solely on-device processing from collection. Apple’s [privacy-manifest documentation](https://developer.apple.com/documentation/bundleresources/privacy-manifest-files) excludes native macOS from the required-reason API declaration requirement, so `UserDefaults` does not make a manifest mandatory for this submission. Data-collection disclosures apply on every platform. There are no declared third-party runtime dependencies; XcodeGen is a build tool.
 
 The current in-app support link is `https://fujikage.io/#quicklook`; Quick Look content at that anchor has not been confirmed. The content pages do not modify that source URL. Screenshots and the App Review sample require an owner-approved real RAF before capture or sharing; the approved icon is retained.
 
-## Current local limitations
+## Release status: October 12, 2026
 
-The local identity inventory during preparation contained Apple Development and Apple Distribution; no Developer ID Application or Mac Installer Distribution identity was present. The public repository destination, free Mac App Store price, and Eric Psalmond copyright are confirmed. No App Store Connect record or release account inputs were confirmed. No distribution profiles were confirmed; they are optional for the current native App Store capabilities. The archive can therefore be prepared and verified, while direct export needs a Developer ID Application identity and store export needs a Mac Installer Distribution identity. No upload, notarization submission, publication, installation, tag, or push was performed by this preparation work.
+Distribution signing and App ID setup are complete. App Store Connect record `6822129984` exists, required agreements are complete, and the app is configured free in 175 regions. The public repository exists and Eric Psalmond’s copyright is recorded. Provisioning profiles remain optional for the current native App Store capabilities.
+
+Remaining store work is build processing, submission assets, contact details, questionnaire entries, and publishing/verifying the support and privacy pages. The owner has been asked for an approved photo/local RAF path, public support email, and App Review telephone number; those answers are still pending. Source-established facts such as no accounts, analytics, app network client, or photo uploads do not need further owner confirmation.
