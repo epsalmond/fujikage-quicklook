@@ -69,7 +69,7 @@ The Mac App Store price is configured as free in 175 regions. App Store Connect 
 
 The source-supported App Privacy answer is **Data Not Collected**: RAF/JPEG processing, settings/bookmarks, and diagnostic logs stay on-device, and the app includes no analytics, built-in network client, or photo uploads. Apple’s [privacy definitions](https://developer.apple.com/app-store/app-privacy-details/) exclude solely on-device processing from collection. Apple’s [privacy-manifest documentation](https://developer.apple.com/documentation/bundleresources/privacy-manifest-files) excludes native macOS from the required-reason API declaration requirement, so `UserDefaults` does not make a manifest mandatory for this submission. Data-collection disclosures apply on every platform. There are no declared third-party runtime dependencies; XcodeGen is a build tool.
 
-The current in-app support link is `https://fujikage.io/#quicklook`; Quick Look content at that anchor has not been confirmed. The content pages do not modify that source URL. The owner has approved a real RAF photo for this release and screenshot capture is in progress. Keep the RAF and its private local path out of the public repository; the approved icon is retained.
+The in-app support link is `https://fujikage.io/#quicklook`, the FujikageQL section of the Fujikage website. The owner has approved a real RAF photo for this release and screenshot capture is in progress. Keep the RAF and its private local path out of the public repository; the approved icon is retained.
 
 ## Release status: October 12, 2026
 

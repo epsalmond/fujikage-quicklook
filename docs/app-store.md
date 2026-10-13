@@ -102,6 +102,6 @@ Apple’s current [Mac screenshot specifications](https://developer.apple.com/he
 - **Export compliance:** no custom cryptography or network client was found in the inspected source. Confirm the final binary and answer the current encryption questions; no legal declaration is made by this draft.
 - **Accessibility claims:** no App Store accessibility claims are proposed without testing the release app against the relevant criteria.
 - **Build and private review contact:** confirm App Store Connect has finished processing build 1.0 (2), then select it for submission. Supply the actual App Review contact telephone number; that owner input remains unanswered. Public support is through GitHub Issues. Signing, App ID registration, app record `6822129984`, agreements, and free availability in 175 regions are already complete.
-- **Links:** use and verify the public URLs above before submission. The current in-app help button opens `https://fujikage.io/#quicklook`, which has no confirmed Quick Look section. These content changes do not modify that source URL or the built app.
+- **Links:** use and verify the public URLs above before submission. The in-app help button opens `https://fujikage.io/#quicklook`, the FujikageQL section of the Fujikage website. It links to this repository and its latest release.
 
 See [releasing.md](releasing.md) for archive, export, and release validation.
