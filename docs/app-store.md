@@ -1,6 +1,8 @@
 # Mac App Store submission text
 
-Prepared for FujikageQL 1.0, build 2. Signing and App ID setup are complete. App Store Connect record `6822129984` exists, the required agreements are complete, and free availability is configured in 175 regions. The public repository exists. Build processing, submission assets, contact details, questionnaire entries, and publication of these pages remain to be completed. No new hosting is required.
+Prepared for FujikageQL 1.0, build 2. Signing and App ID setup are complete. App Store Connect record `6822129984` exists, the required agreements are complete, and free availability is configured in 175 regions. The public repository hosts the support and privacy documents below; no new hosting is required. Build processing, submission assets, contact details, and questionnaire entries remain to be completed.
+
+The full app suite passed **54 tests with zero skips**, including the approved real RAF. The direct-download ZIP is notarized and independently approved. The Store 1.0 (2) package passed server validation and uploaded successfully with delivery ID `b968e84d-e25a-457d-ba2e-e2e71ecd0f55`; App Store Connect processing has not yet been verified. App Review approval remains pending.
 
 ## Metadata
 
@@ -22,7 +24,7 @@ Prepared for FujikageQL 1.0, build 2. Signing and App ID setup are complete. App
 | Privacy Policy URL | `https://github.com/epsalmond/fujikage-quicklook/blob/main/docs/privacy.md` |
 | Marketing URL | `https://github.com/epsalmond/fujikage-quicklook` |
 
-The name and subtitle fit Apple’s 30-character limits. The App Store Connect category is **Photo & Video**; the native macOS bundle category in `project.yml` is separately named `public.app-category.photography`. The copyright field omits the symbol that App Store Connect adds. Publish these pages and verify the public URLs before entering them. [Apple’s app information reference](https://developer.apple.com/help/app-store-connect/reference/app-information/app-information) describes these fields.
+The name and subtitle fit Apple’s 30-character limits. The App Store Connect category is **Photo & Video**; the native macOS bundle category in `project.yml` is separately named `public.app-category.photography`. The copyright field omits the symbol that App Store Connect adds. Verify the public URLs before entering them. [Apple’s app information reference](https://developer.apple.com/help/app-store-connect/reference/app-information/app-information) describes these fields.
 
 **Support contact still needed:** the support page provides GitHub Issues, but Apple’s [platform version reference](https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information) asks the Support URL to lead to actual contact information such as a legal address, email, or telephone number, as required by local law. Add an owner-approved public contact before treating that field as submission-ready. No contact email is invented here.
 
@@ -86,11 +88,11 @@ Thumbnail operations write Finder metadata and a FujikageQL marker, leaving RAF 
 
 ## Screenshots and reviewer sample
 
-No screenshot or real RAF is included in this draft. Obtain an owner-approved RAF and local path before capturing the app or sharing a sample. Confirm permission to display the photo publicly in store screenshots and separately to provide the original RAF to Apple. Check identifying EXIF metadata before sharing the original file.
+The owner has approved the real RAF photo for this release, and screenshot capture is in progress. The RAF and its private local path are kept outside the public repository. Prepare the reviewer attachment separately, checking identifying EXIF metadata before sharing the original file.
 
 Capture the actual release app: a Finder Quick Look preview, the app’s embedded-JPEG preview, and the folder workflow on disposable local copies. Suggested captions are “Preview RAF files with Space,” “See the JPEG stored in your RAF,” and “Apply Finder thumbnails when you need them.” Preserve the approved app icon.
 
-Apple’s current [Mac screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications) require 16:10 images at 1280 × 800, 1440 × 900, 2560 × 1600, or 2880 × 1800 pixels. Use one accepted size consistently and inspect every screenshot for private paths or unrelated desktop content. No screenshots have been generated or uploaded.
+Apple’s current [Mac screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications) require 16:10 images at 1280 × 800, 1440 × 900, 2560 × 1600, or 2880 × 1800 pixels. Use one accepted size consistently and inspect every screenshot for private paths or unrelated desktop content. Screenshot completion and upload remain pending.
 
 ## Remaining submission items
 
@@ -100,6 +102,6 @@ Apple’s current [Mac screenshot specifications](https://developer.apple.com/he
 - **Export compliance:** no custom cryptography or network client was found in the inspected source. Confirm the final binary and answer the current encryption questions; no legal declaration is made by this draft.
 - **Accessibility claims:** no App Store accessibility claims are proposed without testing the release app against the relevant criteria.
 - **Build and contact:** confirm App Store Connect has finished processing build 1.0 (2), then select it for submission. Supply the approved public support email and actual App Review contact telephone number; these owner inputs remain unanswered. Signing, App ID registration, app record `6822129984`, agreements, and free availability in 175 regions are already complete.
-- **Links:** publish and verify these public pages before submission. The current in-app help button opens `https://fujikage.io/#quicklook`, which has no confirmed Quick Look section. These content changes do not modify that source URL or the built app.
+- **Links:** use and verify the public URLs above before submission. The current in-app help button opens `https://fujikage.io/#quicklook`, which has no confirmed Quick Look section. These content changes do not modify that source URL or the built app.
 
 See [releasing.md](releasing.md) for archive, export, and release validation.
