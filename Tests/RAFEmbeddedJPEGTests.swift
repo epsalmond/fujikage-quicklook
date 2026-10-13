@@ -70,6 +70,38 @@ final class RAFEmbeddedJPEGTests: XCTestCase {
         }
     }
 
+    func testRejectsOversizedJPEGHeaderAndAllowsSupportedBoundary() throws {
+        let limit = RAFEmbeddedJPEG.maximumJPEGByteCount
+        let supported = try RAFEmbeddedJPEG.location(
+            inHeader: rafHeader(offset: 0x94, length: limit),
+            fileSize: UInt64(limit) + 0x94
+        )
+        XCTAssertEqual(supported.byteCount, Int(limit))
+        for length in [limit + 1, UInt32.max] {
+            XCTAssertThrowsError(try RAFEmbeddedJPEG.location(
+                inHeader: rafHeader(offset: 0x94, length: length),
+                fileSize: UInt64(length) + 0x94
+            )) { error in
+                XCTAssertEqual(error as? RAFEmbeddedJPEGError, .jpegTooLarge(length))
+            }
+        }
+    }
+
+    func testRejectsOversizedJPEGInSparseRAFWhoseRangeFitsEOF() throws {
+        let offset: UInt32 = 0x94
+        let length = UInt32.max
+        let url = try writeTempRAF(rafHeader(offset: offset, length: length))
+        let handle = try FileHandle(forWritingTo: url)
+        defer { try? handle.close() }
+        try handle.seek(toOffset: UInt64(offset))
+        // A valid SOI and EOF-fitting range must still fail before allocating.
+        try handle.write(contentsOf: Data([0xFF, 0xD8]))
+        try handle.truncate(atOffset: UInt64(offset) + UInt64(length))
+        XCTAssertThrowsError(try RAFEmbeddedJPEG.jpegData(from: url)) { error in
+            XCTAssertEqual(error as? RAFEmbeddedJPEGError, .jpegTooLarge(length))
+        }
+    }
+
     func testRejectsNonJPEGPayload() throws {
         var payload = Data(repeating: 0xAA, count: 64)
         payload[0] = 0x00

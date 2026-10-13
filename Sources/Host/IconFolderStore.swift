@@ -70,6 +70,14 @@ private final class JobHandle: @unchecked Sendable {
     }
 }
 
+/// Tests can deny security-scope access without changing filesystem permissions.
+struct FolderBookmarkAccess: Sendable {
+    var start: @Sendable (URL) -> Bool = { $0.startAccessingSecurityScopedResource() }
+    var stop: @Sendable (URL) -> Void = { $0.stopAccessingSecurityScopedResource() }
+
+    static let live = FolderBookmarkAccess()
+}
+
 @MainActor
 final class IconFolderStore: ObservableObject {
     @Published private(set) var folders: [IconFolder] = []
@@ -80,9 +88,11 @@ final class IconFolderStore: ObservableObject {
     private let foldersKey = "iconFolders"
     private let denylistKey = "iconDenylist"
     private let defaults: UserDefaults
+    private let bookmarkAccess: FolderBookmarkAccess
     private var job: JobHandle?
     private var runLoop: Task<Void, Never>?
 
+    /// Paths for display; jobs resolve the bookmarks before matching files.
     var denylist: [String] {
         folders.filter { $0.kind == .ignore }.map(\.displayPath)
     }
@@ -119,8 +129,9 @@ final class IconFolderStore: ObservableObject {
             ) != .orderedSame
     }
 
-    init(defaults: UserDefaults = .standard) {
+    init(defaults: UserDefaults = .standard, bookmarkAccess: FolderBookmarkAccess = .live) {
         self.defaults = defaults
+        self.bookmarkAccess = bookmarkAccess
         load()
     }
 
@@ -329,19 +340,20 @@ final class IconFolderStore: ObservableObject {
         busy = true
         progress = .listing
 
-        let denylist = self.denylist
         let allow = folder.allowSidecars
         var note = folder.lastNote
         do {
             let resolved = try resolveAndAccess(folder)
-            defer { resolved.stopAccessingSecurityScopedResource() }
+            defer { bookmarkAccess.stop(resolved) }
             StampLog.notice("access \(resolved.path)")
-            let report = try await withCheckedThrowingContinuation { continuation in
-                IconStamper.queue.async {
-                    do {
-                        continuation.resume(returning: try work(resolved, allow, denylist, handle))
-                    } catch {
-                        continuation.resume(throwing: error)
+            let report = try await withResolvedDenylist { denylist in
+                try await withCheckedThrowingContinuation { continuation in
+                    IconStamper.queue.async {
+                        do {
+                            continuation.resume(returning: try work(resolved, allow, denylist, handle))
+                        } catch {
+                            continuation.resume(throwing: error)
+                        }
                     }
                 }
             }
@@ -367,6 +379,25 @@ final class IconFolderStore: ObservableObject {
         }
     }
 
+    /// Hold every exclusion's scope until work finishes. If any exclusion
+    /// cannot be resolved or accessed, stop rather than silently stamping it.
+    func withResolvedDenylist<T: Sendable>(
+        _ work: ([String]) async throws -> T
+    ) async throws -> T {
+        var resolved: [URL] = []
+        defer { resolved.forEach { bookmarkAccess.stop($0) } }
+        for folder in folders.filter({ $0.kind == .ignore }) {
+            do {
+                resolved.append(try resolveAndAccess(folder))
+            } catch {
+                throw IconStampError.denied(
+                    "Could not open excluded folder \(folder.displayPath). Remove the unavailable exclusion from the list, then add the folder again."
+                )
+            }
+        }
+        return try await work(resolved.map(\.path))
+    }
+
     /// Start the security scope before refreshing a stale bookmark. Reinstall
     /// marks bookmarks stale; `bookmarkData` without access throws
     /// "The file couldn’t be opened."
@@ -378,22 +409,28 @@ final class IconFolderStore: ObservableObject {
             relativeTo: nil,
             bookmarkDataIsStale: &stale
         )
-        let accessed = url.startAccessingSecurityScopedResource()
+        let accessed = bookmarkAccess.start(url)
         guard accessed else {
             StampLog.error("startAccessing failed \(url.path)")
             throw IconStampError.denied("Could not open \(url.path). Drop the folder again.")
         }
-        if stale, let i = folders.firstIndex(where: { $0.id == folder.id }) {
-            do {
-                folders[i].bookmark = try url.bookmarkData(
-                    options: .withSecurityScope,
-                    includingResourceValuesForKeys: nil,
-                    relativeTo: nil
-                )
-                folders[i].displayPath = url.path
-                StampLog.notice("refreshed stale bookmark \(url.path)")
-            } catch {
-                StampLog.error("bookmark refresh \(url.path) \(error.stampDetail)")
+        guard IconStampPolicy.isStampableFolder(url) else {
+            bookmarkAccess.stop(url)
+            throw IconStampError.denied("Folder \(url.path) is unavailable. Drop the folder again.")
+        }
+        if let i = folders.firstIndex(where: { $0.id == folder.id }) {
+            folders[i].displayPath = url.path
+            if stale {
+                do {
+                    folders[i].bookmark = try url.bookmarkData(
+                        options: .withSecurityScope,
+                        includingResourceValuesForKeys: nil,
+                        relativeTo: nil
+                    )
+                    StampLog.notice("refreshed stale bookmark \(url.path)")
+                } catch {
+                    StampLog.error("bookmark refresh \(url.path) \(error.stampDetail)")
+                }
             }
         }
         return url

@@ -85,4 +85,143 @@ final class IconFolderStoreTests: XCTestCase {
         XCTAssertNil(store.progress)
         XCTAssertEqual(store.status, "Added 1 folder. Choose Apply thumbnails when ready.")
     }
+
+    func testResolvedExclusionFollowsRenamedChildAndParent() async throws {
+        for renameParent in [false, true] {
+            let container = try makeTempDir("excluded-rename")
+            let root = container.appendingPathComponent("photos", isDirectory: true)
+            let excluded = root.appendingPathComponent("private", isDirectory: true)
+            try FileManager.default.createDirectory(at: excluded, withIntermediateDirectories: true)
+            _ = try writeRAF(in: root, name: "allowed.RAF")
+            _ = try writeRAF(in: excluded, name: "excluded.RAF")
+            let store = IconFolderStore(defaults: makeDefaults())
+            try store.add(url: excluded, kind: .ignore)
+
+            let movedRoot: URL
+            let movedExcluded: URL
+            if renameParent {
+                movedRoot = container.appendingPathComponent("renamed-photos", isDirectory: true)
+                try FileManager.default.moveItem(at: root, to: movedRoot)
+                movedExcluded = movedRoot.appendingPathComponent("private", isDirectory: true)
+            } else {
+                movedRoot = root
+                movedExcluded = root.appendingPathComponent("renamed-private", isDirectory: true)
+                try FileManager.default.moveItem(at: excluded, to: movedExcluded)
+            }
+
+            let found = try await store.withResolvedDenylist { denylist in
+                XCTAssertEqual(denylist, [movedExcluded.path])
+                return IconStamper.rafFiles(in: movedRoot, denylist: denylist)
+            }
+            XCTAssertEqual(found.map(\.lastPathComponent), ["allowed.RAF"])
+            XCTAssertEqual(store.folders[0].displayPath, movedExcluded.path)
+        }
+    }
+
+    func testUnavailableExclusionStopsWorkAndReleasesEarlierScopes() async throws {
+        let root = try makeTempDir("excluded-unavailable")
+        let defaults = makeDefaults()
+        let access = AccessRecord()
+        let store = IconFolderStore(defaults: defaults, bookmarkAccess: access.io)
+        try store.add(url: root, kind: .ignore)
+        var saved = store.folders
+        saved.append(IconFolder(bookmark: Data([0]), displayPath: "/missing", fstype: "", kind: .ignore))
+        defaults.set(try JSONEncoder().encode(saved), forKey: "iconFolders")
+        let reloaded = IconFolderStore(defaults: defaults, bookmarkAccess: access.io)
+        var worked = false
+
+        do {
+            try await reloaded.withResolvedDenylist { _ in worked = true }
+            XCTFail("unavailable exclusion must stop the job")
+        } catch {
+            XCTAssertTrue(error.localizedDescription.contains("excluded folder /missing"))
+        }
+        XCTAssertFalse(worked)
+        XCTAssertEqual(access.started, [root.path])
+        XCTAssertEqual(access.stopped, [root.path])
+    }
+
+    func testSecurityScopeFailureForExclusionStopsWork() async throws {
+        let root = try makeTempDir("excluded-access")
+        let store = IconFolderStore(
+            defaults: makeDefaults(),
+            bookmarkAccess: FolderBookmarkAccess(start: { _ in false }, stop: { _ in XCTFail("no scope to stop") })
+        )
+        try store.add(url: root, kind: .ignore)
+        var worked = false
+        do {
+            try await store.withResolvedDenylist { _ in worked = true }
+            XCTFail("denied exclusion must stop the job")
+        } catch {
+            XCTAssertTrue(error.localizedDescription.contains("excluded folder"))
+        }
+        XCTAssertFalse(worked)
+    }
+
+    func testDeletedExcludedFolderStopsWork() async throws {
+        let root = try makeTempDir("excluded-deleted")
+        let excluded = root.appendingPathComponent("private", isDirectory: true)
+        try FileManager.default.createDirectory(at: excluded, withIntermediateDirectories: true)
+        let store = IconFolderStore(defaults: makeDefaults())
+        try store.add(url: excluded, kind: .ignore)
+        try FileManager.default.removeItem(at: excluded)
+        var worked = false
+        do {
+            try await store.withResolvedDenylist { _ in worked = true }
+            XCTFail("missing exclusion must stop the job")
+        } catch {
+            XCTAssertTrue(error.localizedDescription.contains("excluded folder"))
+        }
+        XCTAssertFalse(worked)
+    }
+
+    func testExclusionScopesAreHeldThroughWorkAndReleasedOnFailure() async throws {
+        let root = try makeTempDir("excluded-scopes")
+        let access = AccessRecord()
+        let store = IconFolderStore(defaults: makeDefaults(), bookmarkAccess: access.io)
+        try store.add(url: root, kind: .ignore)
+        let failure = NSError(domain: "test-work", code: 1)
+        do {
+            try await store.withResolvedDenylist { _ in
+                XCTAssertEqual(access.started, [root.path])
+                XCTAssertTrue(access.stopped.isEmpty)
+                throw failure
+            } as Void
+            XCTFail("work failure must propagate")
+        } catch {
+            XCTAssertEqual(error as NSError, failure)
+        }
+        XCTAssertEqual(access.stopped, [root.path])
+    }
+}
+
+private final class AccessRecord: @unchecked Sendable {
+    private let lock = NSLock()
+    private var starts: [String] = []
+    private var stops: [String] = []
+
+    var io: FolderBookmarkAccess {
+        FolderBookmarkAccess(start: { url in
+            self.lock.lock()
+            defer { self.lock.unlock() }
+            self.starts.append(url.path)
+            return true
+        }, stop: { url in
+            self.lock.lock()
+            defer { self.lock.unlock() }
+            self.stops.append(url.path)
+        })
+    }
+
+    var started: [String] {
+        lock.lock()
+        defer { lock.unlock() }
+        return starts
+    }
+
+    var stopped: [String] {
+        lock.lock()
+        defer { lock.unlock() }
+        return stops
+    }
 }

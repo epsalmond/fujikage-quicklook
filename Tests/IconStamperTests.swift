@@ -89,6 +89,50 @@ final class IconStamperTests: XCTestCase {
         XCTAssertFalse(FileManager.default.fileExists(atPath: dropSidecar.path))
     }
 
+    func testFailedClearPreservesOwnershipAndSidecarForRetry() throws {
+        let url = try writeRAF(in: try makeTempDir("clear-retry"))
+        let bytes = try Data(contentsOf: url)
+        XCTAssertEqual(IconStamper.stamp(files: [url], denylist: [], allowSidecars: true).stamped, 1)
+        XCTAssertTrue(IconStampPolicy.setStampMarker(.iconAndSidecar, at: url))
+        let sidecar = IconStampPolicy.appleDoubleSidecar(for: url)
+        let sidecarBytes = Data([0x00, 0x05, 0x16, 0x07])
+        try sidecarBytes.write(to: sidecar)
+        try FileManager.default.setAttributes([.posixPermissions: 0o444], ofItemAtPath: url.path)
+        var io = StampIO.live
+        io.removeIcon = { _ in false }
+
+        let failed = IconStamper.clear(files: [url], denylist: [], io: io)
+        XCTAssertEqual(failed.failed, 1)
+        XCTAssertEqual(failed.cleared, 0)
+        XCTAssertEqual(failed.failedFiles, [url.lastPathComponent])
+        XCTAssertTrue(IconStampPolicy.hasCustomIcon(at: url))
+        XCTAssertEqual(IconStampPolicy.stampMarker(at: url), .iconAndSidecar)
+        XCTAssertEqual(try Data(contentsOf: sidecar), sidecarBytes)
+        XCTAssertEqual(posixMode(url), 0o444)
+
+        let retry = IconStamper.clear(files: [url], denylist: [])
+        XCTAssertEqual(retry.failed, 0)
+        XCTAssertEqual(retry.cleared, 1)
+        XCTAssertFalse(IconStampPolicy.hasCustomIcon(at: url))
+        XCTAssertNil(IconStampPolicy.stampMarker(at: url))
+        XCTAssertFalse(FileManager.default.fileExists(atPath: sidecar.path))
+        XCTAssertEqual(try Data(contentsOf: url), bytes)
+        XCTAssertEqual(posixMode(url), 0o444)
+    }
+
+    func testFailedSidecarRollbackRetainsOwnershipForClear() throws {
+        let url = try writeRAF(in: try makeTempDir("rollback-retry"))
+        var io = sidecarAppearsAfterStamp()
+        io.removeIcon = { _ in false }
+
+        let report = IconStamper.stamp(files: [url], denylist: [], allowSidecars: false, io: io)
+        XCTAssertEqual(report.failed, 1)
+        XCTAssertEqual(report.stamped, 0)
+        XCTAssertTrue(IconStampPolicy.hasCustomIcon(at: url))
+        XCTAssertEqual(IconStampPolicy.stampMarker(at: url), .iconAndSidecar)
+        XCTAssertEqual(IconStamper.clear(files: [url], denylist: []).cleared, 1)
+    }
+
     /// Simulates FAT/NFS: the volume has a `._` sidecar exactly when the file
     /// carries a custom icon, because that is where the icon xattrs went.
     private func sidecarAppearsAfterStamp() -> StampIO {
@@ -164,6 +208,26 @@ final class IconStamperTests: XCTestCase {
                 return XCTFail("expected denied, got \(error)")
             }
         }
+    }
+
+    func testProbeVolumeStopsWhenSidecarRollbackFails() throws {
+        let dir = try makeTempDir("probe-rollback-failure")
+        let first = try writeRAF(in: dir, name: "first.RAF")
+        let second = try writeRAF(in: dir, name: "second.RAF")
+        var io = sidecarAppearsAfterStamp()
+        io.removeIcon = { _ in false }
+
+        XCTAssertThrowsError(try IconStamper.probeVolume([first, second], io: io)) { error in
+            guard case .denied(let reason)? = error as? IconStampError else {
+                return XCTFail("expected denied, got \(error)")
+            }
+            XCTAssertTrue(reason.contains("Clear can retry"))
+        }
+        XCTAssertTrue(IconStampPolicy.hasCustomIcon(at: first))
+        XCTAssertEqual(IconStampPolicy.stampMarker(at: first), .iconAndSidecar)
+        XCTAssertFalse(IconStampPolicy.hasCustomIcon(at: second))
+        XCTAssertNil(IconStampPolicy.stampMarker(at: second))
+        XCTAssertEqual(IconStamper.clear(files: [first], denylist: []).cleared, 1)
     }
 
     func testRafFilesSkipsSidecarsDenylistAndPackages() throws {

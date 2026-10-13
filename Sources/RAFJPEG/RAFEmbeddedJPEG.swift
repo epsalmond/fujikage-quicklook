@@ -18,6 +18,11 @@ public enum RAFEmbeddedJPEG: Sendable {
     public static let jpegLengthAt = 0x58
     public static let headerByteCount = 0x5C
 
+    /// Supported size of the encoded preview, independent of total RAF size.
+    /// 256 MiB leaves generous room for full-resolution camera JPEGs while
+    /// preventing an untrusted u32 length from requesting gigabytes of memory.
+    public static let maximumJPEGByteCount: UInt32 = 256 * 1024 * 1024
+
     public struct Location: Equatable, Sendable {
         public let offset: UInt64
         public let byteCount: Int
@@ -43,6 +48,9 @@ public enum RAFEmbeddedJPEG: Sendable {
         }
         guard length > 0 else {
             throw RAFEmbeddedJPEGError.invalidJPEGLength(length)
+        }
+        guard length <= maximumJPEGByteCount else {
+            throw RAFEmbeddedJPEGError.jpegTooLarge(length)
         }
 
         let location = Location(offset: UInt64(offset), byteCount: Int(length))
@@ -148,6 +156,7 @@ public enum RAFEmbeddedJPEGError: Error, Equatable, Sendable, LocalizedError {
     case missingMagic
     case invalidJPEGOffset(UInt32)
     case invalidJPEGLength(UInt32)
+    case jpegTooLarge(UInt32)
     case rangeExceedsFile(offset: UInt64, length: UInt64, fileSize: UInt64)
     case truncatedRead(expected: Int, actual: Int)
     case notJPEG
@@ -162,6 +171,8 @@ public enum RAFEmbeddedJPEGError: Error, Equatable, Sendable, LocalizedError {
             return "RAF embedded JPEG offset is invalid (\(offset))."
         case .invalidJPEGLength(let length):
             return "RAF embedded JPEG length is invalid (\(length))."
+        case .jpegTooLarge(let length):
+            return "RAF embedded JPEG is too large (\(length) bytes; maximum \(RAFEmbeddedJPEG.maximumJPEGByteCount))."
         case .rangeExceedsFile(let offset, let length, let fileSize):
             return "RAF embedded JPEG range \(offset)..<\(offset + length) exceeds file size \(fileSize)."
         case .truncatedRead(let expected, let actual):

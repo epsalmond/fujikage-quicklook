@@ -83,6 +83,9 @@ struct StampProgress: Equatable, Sendable {
 /// answers a stamp with a `._` AppleDouble file.
 struct StampIO: Sendable {
     var sidecarExists: @Sendable (URL) -> Bool
+    var removeIcon: @Sendable (URL) -> Bool = { url in
+        NSWorkspace.shared.setIcon(nil, forFile: url.path, options: [])
+    }
 
     static let live = StampIO(sidecarExists: { url in
         FileManager.default.fileExists(atPath: IconStampPolicy.appleDoubleSidecar(for: url).path)
@@ -130,7 +133,11 @@ enum IconStamper {
         }
         let created = try applyStamp(to: url, io: io)
         if created {
-            removeStamp(from: url)
+            guard removeStamp(from: url, io: io) else {
+                throw IconStampError.denied(
+                    "Could not remove the icon on \(url.lastPathComponent) after the volume created a ._ sidecar. Clear can retry."
+                )
+            }
             try? FileManager.default.removeItem(at: IconStampPolicy.appleDoubleSidecar(for: url))
             return .deny(IconStampError.appleDouble(url).localizedDescription)
         }
@@ -188,8 +195,11 @@ enum IconStamper {
                 if created {
                     report.appleDouble += 1
                     if !allowSidecars {
-                        removeStamp(from: url)
-                        try? FileManager.default.removeItem(at: IconStampPolicy.appleDoubleSidecar(for: url))
+                        if removeStamp(from: url, io: io) {
+                            try? FileManager.default.removeItem(at: IconStampPolicy.appleDoubleSidecar(for: url))
+                        } else {
+                            report.notes.append("Could not remove the icon on \(url.lastPathComponent). Clear can retry.")
+                        }
                         report.failed += 1
                         report.failedFiles.append(url.lastPathComponent)
                         report.notes.append("Stopped at \(url.lastPathComponent): ._ sidecar. Enable sidecars for this folder to keep going.")
@@ -210,6 +220,7 @@ enum IconStamper {
     static func clear(
         files: [URL],
         denylist: [String],
+        io: StampIO = .live,
         progress: (@Sendable (Int, Int, String) -> Void)? = nil,
         isCancelled: (@Sendable () -> Bool)? = nil
     ) -> StampReport {
@@ -231,17 +242,17 @@ enum IconStamper {
                 if IconStampPolicy.hasCustomIcon(at: url) { report.notOurs += 1 }
                 continue
             }
-            if removeStamp(from: url) {
+            if removeStamp(from: url, io: io) {
                 report.cleared += 1
+                if marker == .iconAndSidecar {
+                    let sidecar = IconStampPolicy.appleDoubleSidecar(for: url)
+                    if FileManager.default.fileExists(atPath: sidecar.path) {
+                        try? FileManager.default.removeItem(at: sidecar)
+                    }
+                }
             } else {
                 report.failed += 1
                 report.failedFiles.append(url.lastPathComponent)
-            }
-            if marker == .iconAndSidecar {
-                let sidecar = IconStampPolicy.appleDoubleSidecar(for: url)
-                if FileManager.default.fileExists(atPath: sidecar.path) {
-                    try? FileManager.default.removeItem(at: sidecar)
-                }
             }
         }
         return report
@@ -272,10 +283,11 @@ enum IconStamper {
 
     /// Removes the icon and the marker. Does not touch sidecars.
     @discardableResult
-    private static func removeStamp(from url: URL) -> Bool {
+    private static func removeStamp(from url: URL, io: StampIO) -> Bool {
         withOwnerWrite(url) {
+            guard io.removeIcon(url) else { return false }
             IconStampPolicy.removeStampMarker(at: url)
-            return NSWorkspace.shared.setIcon(nil, forFile: url.path, options: [])
+            return true
         }
     }
 
