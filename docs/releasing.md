@@ -1,6 +1,6 @@
 # Preparing releases
 
-FujikageQL has two distribution paths: a Developer ID app in a notarized ZIP for GitHub downloads, and a signed installer package for App Store Connect. Both use the same universal macOS archive and preserve the version/build in `project.yml` (currently 1.0 / 2). `make release` remains a local development-signed build; it is not a distributable release.
+FujikageQL has two distribution paths: a Developer ID app in a notarized ZIP for GitHub downloads, and a signed installer package for App Store Connect. Both use the same universal macOS archive and preserve the version/build in `project.yml` (currently 1.0 / 3). `make release` remains a local development-signed build; it is not a distributable release.
 
 The Python 3 standard-library helper below uses Xcode's archive/export flow. It never uploads to App Store Connect, changes a developer account, installs the app, creates a tag, or publishes to GitHub. It does not use `-allowProvisioningUpdates`; install the required certificates/private keys and profiles separately. Run from the repository root on macOS with Xcode and XcodeGen available.
 
@@ -34,7 +34,7 @@ The following command submits to Apple's notarization service. Run it only when 
 ```sh
 python3 scripts/release/release.py notarize build/release/direct/FujikageQL.app \
   --keychain-profile EXISTING_PROFILE_NAME \
-  --output build/release/FujikageQL-1.0-2-macOS.zip
+  --output build/release/FujikageQL-1.0-3-macOS.zip
 ```
 
 The helper ZIPs the exported app, waits for `notarytool --wait` to return `Accepted`, staples and validates the app, verifies signatures again, and assesses it with `spctl`. It then rebuilds the final ZIP from the stapled app, extracts it into a fresh temporary directory, repeats signature/ticket/assessment checks, and writes a `.zip.sha256` file. The submission ZIP is temporary; publish only the final ZIP and checksum after release authorization. Do not notarize an App Store package.

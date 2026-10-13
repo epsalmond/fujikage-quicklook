@@ -6,6 +6,10 @@ macOS Quick Look host for Fujifilm `.raf`. Spacebar preview reads the JPEG Fuji 
 
 Apple's Quick Look handles uncompressed RAF and fails on compressed RAF. This is a native Mac app. Fujikage on Mac is Designed for iPad, so that binary cannot host Quick Look extensions.
 
+## Install
+
+Download the ZIP from [GitHub Releases](https://github.com/epsalmond/fujikage-quicklook/releases), unzip it in Finder, and drag **FujikageQL.app** into **Applications**. Open the app once from Applications, then follow the [preview instructions](docs/support.md#preview-a-raf) to enable its Quick Look extensions if needed. For updates, quit FujikageQL and replace the installed app.
+
 ## Preview
 
 The extractor range-reads the 92-byte header plus the JPEG. It does not pull the rest of the file.

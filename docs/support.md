@@ -4,6 +4,10 @@ FujikageQL brings Quick Look previews to Fujifilm `.raf` files, including compre
 
 For help, bug reports, and feature requests, use [GitHub Issues](https://github.com/epsalmond/fujikage-quicklook/issues). Search existing issues first, then open an issue if you need help with something not already covered.
 
+## Install a GitHub download
+
+Download the ZIP from [GitHub Releases](https://github.com/epsalmond/fujikage-quicklook/releases), unzip it in Finder, and drag **FujikageQL.app** into **Applications**. Open FujikageQL once from Applications before trying a RAF preview. For updates, quit FujikageQL and replace the installed app.
+
 ## Preview a RAF
 
 1. Open FujikageQL after installing it.
